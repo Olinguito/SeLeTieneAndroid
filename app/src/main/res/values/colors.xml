@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main">#3E97CF</color>
+    <color name="main2">#ff3881b4</color>
+    <color name="main_med">#ff0064be</color>
+    <color name="main_drk">#0054A6</color>
+    <color name="main_drk2">#ff004487</color>
+    <color name="star">#FFE100</color>
+    <color name="text">#ff5d5d5d</color>
+    <color name="textLight">#ff989898</color>
+    <!--red loading colors-->
+    <color name="red1">#f15d42</color>
+    <color name="red2">#ed1c24</color>
+    <color name="red3">#c0151b</color>
+    <color name="red4">#aa171d</color>
+</resources>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="version">1.0.0-preview</string>
+    <string name="fb_app_id">627683907348233</string>
+    <string name="app_name">¡Se le tiene!</string>
+    <string name="label_search">Busqueda</string>
+    <string name="label_profile">Mi Cuenta</string>
+    <string name="label_offer">Ofrecer</string>
+    <string name="label_login">Ingresar</string>
+    <string name="label_register">Registro</string>
+    <string name="label_info">Acerca de</string>
+
+    <string name="loading">Cargando</string>
+
+    <string name="error_network">Comprueba tu conexion a internet</string>
+    <string name="error_server_timeout">Error al conectar, el servidor no responde</string>
+    <string name="error_auth">Problema de autenticación</string>
+    <string name="error_server">Ocurrió un error con el servidor</string>
+    <string name="error_client">Comprueba que los datos sean correctos</string>
+    <string name="error_generic">Ocurrió un error</string>
+
+    <!-- start screen -->
+    <string name="start.facebook">Ingresa con Facebook</string>
+    <string name="start.email">Ingresa con Email</string>
+    <string name="start.new">Nuevo Usuario</string>
+    <string name="start.offer">¿Tienes un producto o servivio?\nOfrécelo aquí</string>
+
+    <!-- register/login -->
+    <string name="rl.send">Enviar registro</string>
+    <string name="rl.name">nombre</string>
+    <string name="rl.email">email</string>
+    <string name="rl.phone">teléfono</string>
+    <string name="rl.pass">contraseña</string>
+    <string name="rl.pass_confirm">confirmar contraseña</string>
+    <string name="rl.name_hint">Nombre completo</string>
+    <string name="rl.email_hint">ejemplo@undominio.com</string>
+    <string name="rl.phone_hint">Teléfono de contacto</string>
+    <string name="rl.pass_hint">Ingrese su contraseña</string>
+    <string name="rl.pass_conf_hint">Repita la contraseña</string>
+    <string name="rl.sign_in">Entrar</string>
+    <string name="rl.fill_facebook">Llenar con datos de Facebook</string>
+    <string name="rl.progress">Enviando datos al servidor</string>
+    <string name="rl.loging">Logueando usuario</string>
+    <string name="error_invalid_email">Dirección de e-mail invalida</string>
+    <string name="error_invalid_password">Contraseña muy corta</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="error_user_exists">Un usuario con el mismo Email ya existe</string>
+
+    <!-- offer -->
+    <string name="product">Producto</string>
+    <string name="service">Servicio</string>
+    <string name="offer.product_type">Tipo de producto</string>
+    <string name="offer.service_type">Tipo de servicio</string>
+    <string name="offer.add_photo">añadir foto</string>
+    <string name="offer.description">Descripcion</string>
+    <string name="offer.comments">Comentarios</string>
+    <string name="offer.training">Capacitaciones</string>
+    <string name="offer.submit_product">Ofercer producto</string>
+    <string name="offer.submit_service">Ofrecer servicio</string>
+    <string name="offer.created_service">Tu servicio a sido creado con éxito</string>
+    <string name="offer.created_product">Tu producto a sido creado con éxito</string>
+
+    <!-- info -->
+    <string name="dps_about">Departamento para la Prosperidad Social\n\n©2013 - Derechos Reservados\n\nTenga en cuenta que esta aplicación requiere acceso a internet y puede consumir recursos de su plan de datos.</string>
+    <string name="team">Autores: Equipo Olinguito</string>
+    <string name="team.daniel">Daniel Olano Castro</string>
+    <string name="team.roberto">Roberto Sarmiento Jalkh</string>
+    <string name="team.jorge">Jorge R Ovalle Zuelta</string>
+    <string name="team.daniels">Daniel Suárez Pérez</string>
+    <string name="team.david">David Barinas Orjuela</string>
+
+    <!-- item list -->
+    <string name="list.empty">Ningun elemento para mostrar</string>
+    <string name="list.filter">Filtrar busqueda</string>
+
+    <string name="action_settings">Settings</string>
+    
+    <!--filter view-->
+    <string name="filter.title">Filtrar búsqueda</string>
+    <string name="filter.category">Seleccione la categoría</string>
+    <string name="filter.text">Ingrese palabras clave</string>
+    <string name="filter.text.hint">Ejm: Alimentos, Empanadas, Trigo</string>
+    <string name="filter.city">Ciudad</string>
+    <string name="filter.rating">Marque la calificación mínima a mostrar</string>
+    <string name="filter.btn">Aplicar filtros</string>
+
+    <!--profile-->
+    <string name="profile.recents">Recientes</string>
+    <string name="profile.favorites">Favoritos</string>
+    <string name="profile.close">Cerrar sesión</string>
+    <string name="profile.edit">Editar</string>
+
+</resources>

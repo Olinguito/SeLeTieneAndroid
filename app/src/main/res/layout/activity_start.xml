@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:animateLayoutChanges="true"
+        >
+
+    <RelativeLayout style="@style/start.logo_container">
+
+        <ImageView
+                android:id="@+id/start_logo"
+                style="@style/start.logo"/>
+
+        <TextView
+                android:text="@string/app_name"
+                style="@style/start.title"/>
+
+        <Button
+                android:visibility="gone"
+                android:id="@+id/start_btn_info"
+                style="@style/start.info"
+                android:onClick="info"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/start_loading"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loading"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/start_btns_container"
+            style="@style/start.btn_container"
+            android:visibility="gone">
+
+        <!--<Button android:text="@string/start.facebook" style="@style/start.btn"/>-->
+        <Button
+                android:id="@+id/login_btn"
+                android:onClick="login"
+                android:text="@string/start.email"
+                style="@style/start.btn"/>
+
+        <Button
+                android:id="@+id/register_btn"
+                android:onClick="register"
+                android:text="@string/start.new"
+                style="@style/start.btn_new"/>
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/start_btn_offer"
+            android:visibility="gone"
+            android:onClick="offer"
+            style="@style/start.offer"
+            android:text="@string/start.offer"/>
+</LinearLayout>

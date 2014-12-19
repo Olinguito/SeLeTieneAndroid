@@ -1,0 +1,239 @@
+<resources>
+    <!--
+    Application Theme
+    -->
+    <style name="AppTheme" parent="AppTheme.Base" />
+    <!-- Base application theme. -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:windowBackground">@drawable/bg_app</item>
+        <!-- lollipop app colors -->
+        <item name="colorPrimary">@color/main_drk</item>
+        <item name="colorPrimaryDark">@color/main_drk2</item>
+        <item name="colorAccent">@color/main</item>
+        <item name="android:editTextStyle">@style/input</item>
+    </style>
+
+    <style name="input" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/input</item>
+        <item name="android:textColor">@color/main</item>
+    </style>
+
+    <style name="input_long">
+        <item name="android:background">@drawable/input_long</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+    <style name="input_long.multi">
+        <item name="android:lines">6</item>
+        <item name="android:gravity">top|left</item>
+    </style>
+
+    <style name="btn">
+        <item name="android:background">@drawable/btn_main</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <!--API_LEVEL > 10-->
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="btn.bottom">
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/btn_main_bottom</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:elevation">@dimen/button_elevation_important</item>
+    </style>
+
+    <style name="ratingbar">
+        <item name="android:numStars">5</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="ratingbar.small">
+        <item name="android:isIndicator">true</item>
+        <item name="android:minHeight">25dp</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_small</item>
+    </style>
+    <style name="ratingbar.med">
+        <item name="android:isIndicator">true</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_med</item>
+    </style>
+    <style name="ratingbar.blue">
+        <item name="android:progressDrawable">@drawable/ratingbar_blue</item>
+    </style>
+
+    <!--
+    View's individual styles
+    -->
+    <!--start screen-->
+    <style name="start">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="start.logo_container">
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="start.logo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:src">@drawable/logo_med</item>
+    </style>
+    <style name="start.title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_below">@+id/start_logo</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+    <style name="start.info">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:text">i</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_start_info</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:elevation">@dimen/button_elevation_important</item>
+    </style>
+    <style name="start.btn_container">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+    </style>
+    <style name="start.btn" parent="btn">
+        <item name="android:background">@drawable/btn_start</item>
+        <item name="android:textColor">@color/main</item>
+    </style>
+    <style name="start.btn_new" parent="btn">
+        <item name="android:layout_marginTop">15dp</item>
+    </style>
+    <style name="start.offer">
+        <item name="android:background">@drawable/btn_start_offer</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_gravity">bottom</item>
+    </style>
+
+    <!--item list-->
+    <style name="list_btn">
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">9dp</item>
+        <item name="android:paddingRight">9dp</item>
+        <item name="android:background">@drawable/btn_transp_border_blue</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="list_btn.filter">
+        <item name="android:layout_gravity">left</item>
+    </style>
+    <style name="list_btn.choice">
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+    <style name="list_btn.switch">
+        <item name="android:layout_gravity">right</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <!--profile-->
+    <style name="profile"></style>
+    <style name="profile.close_btn" parent="btn">
+        <item name="android:background">@drawable/btn_red</item>
+    </style>
+    <style name="btn_long">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/gray_white</item>
+        <item name="android:background">@drawable/btn_long</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:drawablePadding">@dimen/activity_horizontal_margin</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="btn_long.fav">
+        <item name="android:drawableLeft">@drawable/bg_fav</item>
+    </style>
+    <style name="btn_long.rec">
+        <item name="android:drawableLeft">@drawable/bg_recent</item>
+    </style>
+
+    <!--contact info-->
+    <style name="contactInfo">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="contactInfo.table">
+        <item name="android:stretchColumns">1</item>
+    </style>
+    <style name="contactInfo.row">
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+    <style name="contactInfo.cell">
+        <item name="android:background">@color/main</item>
+        <item name="android:layout_margin">0.5dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+    <style name="contactInfo.cell.topLeft">
+        <item name="android:background">@drawable/bg_blue_topleft</item>
+    </style>
+    <style name="contactInfo.cell.topRight">
+        <item name="android:background">@drawable/bg_blue_topright</item>
+    </style>
+    <style name="contactInfo.cell.bottomLeft">
+        <item name="android:background">@drawable/bg_blue_botleft</item>
+    </style>
+    <style name="contactInfo.cell.bottomRight">
+        <item name="android:background">@drawable/bg_blue_botright</item>
+    </style>
+
+    <!--filter dialog-->
+    <style name="filter_text_label" >
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textSize">@dimen/abc_text_size_small_material</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="filter_radiobtn">
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/main_white</item>
+        <item name="android:textSize">@dimen/abc_text_size_small_material</item>
+        <item name="android:button">@android:color/transparent</item>
+    </style>
+    <style name="filter_radiobtn.left">
+        <item name="android:background">@drawable/radio_blue_left</item>
+    </style>
+    <style name="filter_radiobtn.right">
+        <item name="android:background">@drawable/radio_blue_right</item>
+    </style>
+</resources>

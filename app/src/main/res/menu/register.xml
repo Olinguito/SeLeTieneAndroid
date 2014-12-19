@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:onClick="fillFormWithFacebook"
+            android:id="@+id/fb_fill"
+            app:showAsAction="always"
+            android:title="@string/rl.fill_facebook"
+            android:icon="@drawable/com_facebook_button_like_icon"/>
+</menu>

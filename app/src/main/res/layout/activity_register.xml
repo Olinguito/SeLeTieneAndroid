@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              tools:context=".RegisterActivity"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:orientation="vertical">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:overScrollMode="ifContentScrolls"
+            >
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+            <TextView
+                    android:text="@string/rl.name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <EditText
+                    android:id="@+id/reg_field_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:hint="@string/rl.name_hint"
+                    android:inputType="textCapSentences"
+                    />
+
+            <TextView
+                    android:text="@string/rl.email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            <EditText
+                    android:id="@+id/reg_field_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:hint="@string/rl.email_hint"
+                    android:inputType="textEmailAddress"
+                    />
+
+            <!--<TextView-->
+                    <!--android:text="@string/rl.phone"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"/>-->
+
+            <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="@string/rl.phone_hint"-->
+                    <!--/>-->
+
+            <TextView
+                    android:text="@string/rl.pass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <EditText
+                    android:id="@+id/reg_field_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:hint="@string/rl.pass_hint"
+                    android:inputType="textPassword"
+                    />
+
+            <TextView
+                    android:text="@string/rl.pass_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <EditText
+                    android:id="@+id/reg_field_pwd_conf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rl.pass_conf_hint"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionSend"
+                    />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+            android:id="@+id/reg_submitbutton"
+            android:onClick="createUser"
+            android:text="@string/rl.send"
+            style="@style/btn.bottom"
+            />
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="order_choices">
+        <item>Por calificación</item>
+        <item>Más recientes</item>
+        <item>De A-Z (producto)</item>
+        <item>De A-Z (ofertante)</item>
+    </string-array>
+</resources>

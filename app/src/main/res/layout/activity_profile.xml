@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="ifContentScrolls"
+            android:fillViewport="true"
+            >
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                >
+
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:gravity="center">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="20dp"
+                        android:id="@+id/profile_name"
+                        android:gravity="center"/>
+
+                <TableLayout style="@style/contactInfo.table">
+
+                    <TableRow style="@style/contactInfo.row">
+
+                        <ImageView
+                                android:src="@drawable/phone"
+                                style="@style/contactInfo.cell.topLeft"/>
+
+                        <TextView
+                                android:id="@+id/profile_phone"
+                                style="@style/contactInfo.cell.topRight"/>
+                    </TableRow>
+
+                    <TableRow style="@style/contactInfo.row">
+
+                    <ImageView
+                    android:src="@drawable/mobile"
+                    style="@style/contactInfo.cell"/>
+
+                    <TextView
+                    android:text="---"
+                    style="@style/contactInfo.cell"/>
+                    </TableRow>
+
+                    <TableRow style="@style/contactInfo.row">
+
+                        <ImageView
+                                android:src="@drawable/mail"
+                                style="@style/contactInfo.cell.bottomLeft"/>
+
+                        <TextView android:id="@+id/profile_email" style="@style/contactInfo.cell.bottomRight"/>
+                    </TableRow>
+                </TableLayout>
+
+                <Button
+                        android:onClick="logout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/profile.close"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/btn_red"
+                        android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="top">
+
+                <Button
+                        android:text="@string/profile.favorites"
+                        android:id="@+id/button2"
+                        style="@style/btn_long.fav"
+                        />
+
+                <Button
+                        android:text="@string/profile.recents"
+                        android:id="@+id/button3"
+                        style="@style/btn_long.rec"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:background="@drawable/red_line"-->
+    <!--android:layout_height="4dp"/>-->
+</FrameLayout>

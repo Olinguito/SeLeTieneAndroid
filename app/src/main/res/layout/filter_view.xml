@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_app"
+              >
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/abc_text_size_title_material"
+            android:text="@string/filter.title"
+            android:background="?attr/colorPrimaryDark"/>
+
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:overScrollMode="ifContentScrolls"
+                android:fillViewport="true"
+            >
+
+        <LinearLayout
+                android:padding="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+            <TextView
+                    style="@style/filter_text_label"
+                    android:text="@string/filter.category"
+                    android:id="@+id/textView"/>
+
+            <RadioGroup
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+                <RadioButton
+                        android:text="@string/product"
+                        android:id="@+id/filter_product"
+                        style="@style/filter_radiobtn.left"
+                        />
+
+                <RadioButton
+                        android:text="@string/service"
+                        style="@style/filter_radiobtn.right"
+                        />
+            </RadioGroup>
+
+            <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/filter.city"
+                    android:id="@+id/spinner"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/btn_transp_border_blue"
+                    android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                    style="@style/filter_text_label"
+                    android:text="@string/filter.text"
+                    android:id="@+id/textView2"/>
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText"
+                    android:hint="@string/filter.text.hint"
+                    style="@style/input"
+                    android:inputType="text"/>
+
+            <TextView
+                    style="@style/filter_text_label"
+                    android:text="@string/filter.rating"
+                    android:id="@+id/textView3"
+                    />
+
+            <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ratingBar"
+                    style="@style/ratingbar.blue"
+                    />
+        </LinearLayout>
+    </ScrollView>
+
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter.btn"
+            android:id="@+id/filter_apply_btn"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            style="@style/btn"/>
+
+</LinearLayout>
