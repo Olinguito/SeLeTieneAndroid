@@ -26,13 +26,13 @@
         android:name="co.olinguito.seletiene.app.ItemListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="3"
         tools:layout="@android:layout/list_content" />
 
     <FrameLayout
         android:id="@+id/item_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3" />
+        android:layout_weight="4" />
 
 </LinearLayout>
