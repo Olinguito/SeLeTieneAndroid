@@ -1,7 +1,6 @@
 package co.olinguito.seletiene.app.util;
 
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import co.olinguito.seletiene.app.R;

@@ -2,7 +2,6 @@ package co.olinguito.seletiene.app.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.HurlStack;
@@ -17,9 +16,9 @@ import java.net.URL;
 
 public class RequestSingleton {
     private static RequestSingleton mInstance;
+    private static Context mCtx;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static Context mCtx;
 
     private RequestSingleton(Context context) {
         mCtx = context;
@@ -94,7 +93,8 @@ public class RequestSingleton {
             mFactory = new OkUrlFactory(client);
         }
 
-        @Override protected HttpURLConnection createConnection(URL url) throws IOException {
+        @Override
+        protected HttpURLConnection createConnection(URL url) throws IOException {
             return mFactory.open(url);
         }
     }

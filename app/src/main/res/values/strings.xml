@@ -10,9 +10,7 @@
     <string name="label_login">Ingresar</string>
     <string name="label_register">Registro</string>
     <string name="label_info">Acerca de</string>
-
     <string name="loading">Cargando</string>
-
     <string name="error_network">Comprueba tu conexion a internet</string>
     <string name="error_server_timeout">Error al conectar, el servidor no responde</string>
     <string name="error_auth">Problema de autenticación</string>
@@ -51,8 +49,8 @@
     <!-- offer -->
     <string name="product">Producto</string>
     <string name="service">Servicio</string>
-    <string name="offer.product_type">Tipo de producto</string>
-    <string name="offer.service_type">Tipo de servicio</string>
+    <string name="offer.product_title">Nombre de producto</string>
+    <string name="offer.service_title">Nombre de servicio</string>
     <string name="offer.add_photo">añadir foto</string>
     <string name="offer.description">Descripcion</string>
     <string name="offer.comments">Comentarios</string>
@@ -74,10 +72,9 @@
     <!-- item list -->
     <string name="list.empty">Ningun elemento para mostrar</string>
     <string name="list.filter">Filtrar busqueda</string>
-
     <string name="action_settings">Settings</string>
-    
-    <!--filter view-->
+
+    <!-- filter view -->
     <string name="filter.title">Filtrar búsqueda</string>
     <string name="filter.category">Seleccione la categoría</string>
     <string name="filter.text">Ingrese palabras clave</string>
@@ -86,10 +83,17 @@
     <string name="filter.rating">Marque la calificación mínima a mostrar</string>
     <string name="filter.btn">Aplicar filtros</string>
 
-    <!--profile-->
+    <!-- profile -->
     <string name="profile.recents">Recientes</string>
     <string name="profile.favorites">Favoritos</string>
     <string name="profile.close">Cerrar sesión</string>
     <string name="profile.edit">Editar</string>
+    <!--recent favorites-->
+    <string name="loading_rec">Cargando recientes</string>
+    <string name="loading_fav">Cargando favoritos</string>
+    <!-- detail -->
+    <string name="detail_contact_btn">Contactar</string>
+    <string name="title_activity_recents">Recents</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

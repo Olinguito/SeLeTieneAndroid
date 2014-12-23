@@ -6,14 +6,14 @@
               android:layout_height="wrap_content"
               android:paddingTop="8dp"
               android:paddingBottom="8dp"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
               android:layout_marginTop="1dp"
               android:background="#c8ffffff"
         >
     <com.android.volley.toolbox.NetworkImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginRight="10dp"
             android:id="@+id/l_picture"/>
 
@@ -29,26 +29,25 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="Fuuu"
+                    android:textSize="@dimen/abc_text_size_body_1_material"
                     android:id="@+id/l_title"/>
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Anónimo"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/abc_text_size_small_material"
                     android:textStyle="italic"
+                    android:layout_marginTop="-3dp"
+                    android:textColor="@color/textLight"
                     android:id="@+id/l_name"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="15sp"
-                    android:layout_marginTop="8dp"
+                    android:textSize="@dimen/abc_text_size_small_material"
+                    android:layout_marginTop="12dp"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:text="Fuuu das dsad fdsvas laksdasnd dsada dasdmdm das"
                     android:id="@+id/l_desc"/>
         </LinearLayout>
 

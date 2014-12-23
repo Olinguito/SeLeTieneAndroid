@@ -8,66 +8,52 @@ import com.android.volley.*;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.squareup.okhttp.OkUrlFactory;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.android.volley.Request.Method.GET;
-import static com.android.volley.Request.Method.POST;
+import static com.android.volley.Request.Method.*;
 
 public class Api {
-    private static RequestSingleton sRequestSingleton = RequestSingleton.getInstance(App.getContext());
-    public static RequestQueue requestQueue = sRequestSingleton.getRequestQueue();
     public static final String BASE_URL = "http://seletiene.cloudapp.net";
     private static final String LOGIN_PARAM_EMAIL = "username";
     private static final String LOGIN_PARAM_PWD = "password";
-
-    private static final int REQUEST_TIMEOUT = 6000;
+    private static final int REQUEST_TIMEOUT = 2000;
     private static final int REQUEST_RETRY_COUNT = 2;
-    private static final float REQUEST_BACKOFF_MULT = 1.5f;
-
-    private static SharedPreferences tokenPreference;
-
-    static {
-        tokenPreference = App.getContext().getSharedPreferences("TOKEN", Context.MODE_PRIVATE);
-    }
-
-    private static String authToken;
-
-    static {
-        authToken = tokenPreference.getString("token", "");
-    }
-
+    private static final float REQUEST_BACKOFF_MULT = 1.4f;
     private static final Map<String, String> enpoints;
-
     static {
         Map<String, String> map = new HashMap<>();
         map.put("items", "/api/ProductServices?ignoreDPSValidation=true");
         map.put("token", "/token");
         map.put("me", "/api/Account");
-//        map.put("favorites", "/usuario/me/favorito");
+        map.put("favorites", "/api/Account/Favorites");
+        map.put("favoriteUpdate", "/api/ProductServices/Favorite?productServiceId=");
         enpoints = Collections.unmodifiableMap(map);
+    }
+    private static RequestSingleton sRequestSingleton = RequestSingleton.getInstance(App.getContext());
+    public static RequestQueue requestQueue = sRequestSingleton.getRequestQueue();
+    private static SharedPreferences tokenPreference;
+    static {
+        tokenPreference = App.getContext().getSharedPreferences("TOKEN", Context.MODE_PRIVATE);
+    }
+    private static String authToken;
+    static {
+        authToken = tokenPreference.getString("token", "");
     }
 
     public static void register(JSONObject data, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        JsonObjectRequest request = new JsonObjectRequest(POST, url("me"), data, listener, errorListener) {
-            // ignore response body because it's empty sometimes
-            @Override
-            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-                return Response.success(new JSONObject(), HttpHeaderParser.parseCacheHeaders(response));
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(10000, 1, 1));
+        JsonObjectRequest request = new Request(POST, url("me"), data, listener, errorListener);
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, 1));
         requestQueue.add(request);
     }
 
@@ -116,12 +102,26 @@ public class Api {
         requestQueue.add(itemsRequest);
     }
 
+    public static void createProductOrService(JSONObject data, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        requestQueue.add(new Request(POST, url("items"), data, listener, errorListener));
+    }
+
     public static void getUserProfile(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         requestQueue.add(new Request(GET, url("me"), null, listener, errorListener));
     }
 
     public static com.android.volley.Request getUserFavorites(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         return requestQueue.add(new ArrayRequest(url("favorites"), listener, errorListener));
+    }
+
+    public static com.android.volley.Request addToFavorites(int id, Response.Listener<JSONObject> listener) {
+        String url = url("favoriteUpdate") + id;
+        return requestQueue.add(new Request(PUT, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
+    }
+
+    public static com.android.volley.Request deleteFromFavorites(int id, Response.Listener<JSONObject> listener) {
+        String url = url("favoriteUpdate") + id;
+        return requestQueue.add(new Request(DELETE, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
     }
 
     private static String url(String endpoint) {
@@ -156,7 +156,7 @@ public class Api {
             errorString = R.string.error_server_timeout;
         else if (error instanceof AuthFailureError)
             errorString = R.string.error_auth;
-        else if (error.networkResponse.statusCode == 400)
+        else if (error.networkResponse != null && error.networkResponse.statusCode == 400)
             errorString = R.string.error_client;
         else if (error instanceof ServerError)
             errorString = R.string.error_server;
@@ -180,6 +180,25 @@ public class Api {
             if (hasCredentials())
                 headers.put("Authorization", "Bearer " + authToken);
             return headers;
+        }
+
+        /**
+         * Response accepts empty json bodies
+         */
+        @Override
+        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+            try {
+                String jsonString =
+                        new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                if (jsonString.isEmpty())
+                    return Response.success(new JSONObject(), HttpHeaderParser.parseCacheHeaders(response));
+                else
+                    return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
+            } catch (UnsupportedEncodingException e) {
+                return Response.error(new ParseError(e));
+            } catch (JSONException je) {
+                return Response.error(new ParseError(je));
+            }
         }
     }
 

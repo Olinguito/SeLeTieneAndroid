@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.IntentCompat;
-import android.text.TextUtils;
+import android.util.Log;
 import co.olinguito.seletiene.app.StartActivity;
-import org.w3c.dom.Text;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 
 public class UserManager {
     private static final String PREF_NAME = "USER";
@@ -39,6 +42,26 @@ public class UserManager {
         mEditor.putString("phone", user.getPhone());
         mEditor.putBoolean("login", true);
         mEditor.apply();
+    }
+
+    public void saveRecent(RecentPnS recent) {
+        Gson gson = new Gson();
+        mEditor.putString("recent", gson.toJson(recent))
+                .commit();
+    }
+
+    public RecentPnS getRecent() {
+        Gson gson = new Gson();
+        String json = mPreferences.getString("recent", "");
+        RecentPnS recent;
+        if (json.isEmpty()) {
+            recent = new RecentPnS();
+        } else {
+            Type type = new TypeToken<RecentPnS>() {
+            }.getType();
+            recent = gson.fromJson(json, type);
+        }
+        return recent;
     }
 
     public void logout() {

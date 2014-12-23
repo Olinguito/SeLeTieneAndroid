@@ -25,6 +25,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
     </style>
     <style name="input_long.multi">
         <item name="android:lines">6</item>
@@ -57,11 +58,12 @@
     </style>
     <style name="ratingbar.small">
         <item name="android:isIndicator">true</item>
-        <item name="android:minHeight">25dp</item>
+        <item name="android:minHeight">20dp</item>
         <item name="android:progressDrawable">@drawable/ratingbar_small</item>
     </style>
     <style name="ratingbar.med">
         <item name="android:isIndicator">true</item>
+        <item name="android:minHeight">40dp</item>
         <item name="android:progressDrawable">@drawable/ratingbar_med</item>
     </style>
     <style name="ratingbar.blue">
@@ -168,7 +170,8 @@
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:drawablePadding">@dimen/activity_horizontal_margin</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:textAllCaps">false</item>
     </style>
     <style name="btn_long.fav">

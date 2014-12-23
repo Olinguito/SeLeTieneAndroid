@@ -30,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -120,7 +119,8 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                 Api.login(mEmailView.getText().toString(), mPasswordView.getText().toString(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progress.dismiss();
+                        if (progress.isShowing())
+                            progress.dismiss();
                         // save user profile data in shared preferences
                         try {
                             userManager.saveUser(new UserManager.User(

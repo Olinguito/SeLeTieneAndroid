@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:orientation="vertical">
+
+    <ListView
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/rec_fav_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="co.olinguito.seletiene.app.RecentFavActivity">
+    </ListView>
+
+    <LinearLayout
+            android:id="@+id/empty_view"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/empty"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/list.empty"
+                android:textSize="20sp"
+                android:textColor="@color/textLight"
+                android:layout_marginTop="20dp"
+                />
+    </LinearLayout>
+</LinearLayout>

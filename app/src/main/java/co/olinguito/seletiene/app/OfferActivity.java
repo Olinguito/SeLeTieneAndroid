@@ -10,9 +10,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import co.olinguito.seletiene.app.util.Api;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class OfferActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -25,11 +31,11 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     private int REQUEST_IMAGE_CAPTURE = 1;
     private Button mTakePhotoBtn;
     // product fields
-    private EditText mProductType;
+    private EditText mProductTitle;
     private ImageView mPhotoView;
     private EditText mProductDesc;
     // service fields
-    private EditText mServiceType;
+    private EditText mServiceTitle;
     private EditText mServiceComment;
     private EditText mServiceTraining;
 
@@ -60,10 +66,10 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
         mPhotoView = (ImageView) findViewById(R.id.new_product_photo);
         mTakePhotoBtn = (Button) findViewById(R.id.take_photo);
         // product fields
-        mProductType = (EditText) findViewById(R.id.new_product_type);
+        mProductTitle = (EditText) findViewById(R.id.new_product_title);
         mProductDesc = (EditText) findViewById(R.id.new_product_description);
         // service fields
-        mServiceType = (EditText) findViewById(R.id.new_service_type);
+        mServiceTitle = (EditText) findViewById(R.id.new_service_title);
         mServiceComment = (EditText) findViewById(R.id.new_service_comments);
         mServiceTraining = (EditText) findViewById(R.id.new_service_training);
     }
@@ -94,10 +100,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     }
 
     public void offerService(View view) {
-        if (validService()) {
-            Toast.makeText(this, R.string.offer_created_service, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        if (validService()) sendData(SERVICE);
     }
 
     public boolean validService() {
@@ -110,9 +113,9 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
             mServiceComment.setError(getString(R.string.error_field_required));
             focusView = mServiceComment;
         }
-        if (TextUtils.isEmpty(mServiceType.getText())) {
-            mServiceType.setError(getString(R.string.error_field_required));
-            focusView = mServiceType;
+        if (TextUtils.isEmpty(mServiceTitle.getText())) {
+            mServiceTitle.setError(getString(R.string.error_field_required));
+            focusView = mServiceTitle;
         }
         if (focusView != null) {
             focusView.requestFocus();
@@ -124,10 +127,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     }
 
     public void offerProduct(View view) {
-        if (validProduct()) {
-            Toast.makeText(this, R.string.offer_created_product, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        if (validProduct()) sendData(PRODUCT);
     }
 
     public boolean validProduct() {
@@ -136,9 +136,9 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
             mProductDesc.setError(getString(R.string.error_field_required));
             focusView = mProductDesc;
         }
-        if (TextUtils.isEmpty(mProductType.getText())) {
-            mProductType.setError(getString(R.string.error_field_required));
-            focusView = mProductType;
+        if (TextUtils.isEmpty(mProductTitle.getText())) {
+            mProductTitle.setError(getString(R.string.error_field_required));
+            focusView = mProductTitle;
         }
         if (focusView != null) {
             focusView.requestFocus();
@@ -146,6 +146,39 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
         } else {
             return true;
         }
+    }
+
+    public void sendData(final int type) {
+        // set data to send
+        JSONObject data = new JSONObject();
+        try {
+            data.put("type", type);
+            if (type == PRODUCT) {
+                data.put("title", mProductTitle.getText());
+                data.put("description", mProductDesc.getText());
+            } else if (type == SERVICE) {
+                data.put("title", mServiceTitle.getText());
+                data.put("description", mServiceComment.getText());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // make API call
+        Api.createProductOrService(data, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                int message = R.string.offer_created_product;
+                if (type == SERVICE) message = R.string.offer_created_service;
+                Log.d("OFFER>", response.toString());
+                Toast.makeText(OfferActivity.this, message, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("OFFER>", error.toString());
+            }
+        });
     }
 
     @Override

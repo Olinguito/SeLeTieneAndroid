@@ -5,9 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import co.olinguito.seletiene.app.util.BaseAdapter;
+import co.olinguito.seletiene.app.util.RecentPnS;
+import co.olinguito.seletiene.app.util.UserManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ItemListActivity extends ActionBarActivity
-        implements ItemListFragment.Callbacks {
+        implements BaseAdapter.ClickListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -31,15 +37,16 @@ public class ItemListActivity extends ActionBarActivity
         }
     }
 
-    /**
-     * Callback method from {@link ItemListFragment.Callbacks}
-     * indicating that the item with the given ID was selected.
-     */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemClick(View v, JSONObject item) {
+        UserManager userManager = new UserManager(this);
+        // save viewed item to recent list
+        RecentPnS recent = userManager.getRecent();
+        recent.add(item);
+        userManager.saveRecent(recent);
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID, id);
+            arguments.putString(ItemDetailFragment.JSON_OBJECT_STRING, item.toString());
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -47,7 +54,7 @@ public class ItemListActivity extends ActionBarActivity
                     .commit();
         } else {
             Intent detailIntent = new Intent(this, ItemDetailActivity.class);
-            detailIntent.putExtra(ItemDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(ItemDetailFragment.JSON_OBJECT_STRING, item.toString());
             startActivity(detailIntent);
         }
     }
@@ -70,4 +77,5 @@ public class ItemListActivity extends ActionBarActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

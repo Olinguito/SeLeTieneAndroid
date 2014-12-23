@@ -25,8 +25,8 @@
                     android:orientation="vertical">
 
                 <EditText
-                        android:id="@+id/new_product_type"
-                        android:hint="@string/offer.product_type"
+                        android:id="@+id/new_product_title"
+                        android:hint="@string/offer.product_title"
                         android:inputType="text"
                         style="@style/input_long"/>
 
@@ -103,8 +103,8 @@
                     android:layout_weight="1">
 
                 <EditText
-                        android:id="@+id/new_service_type"
-                        android:hint="@string/offer.service_type"
+                        android:id="@+id/new_service_title"
+                        android:hint="@string/offer.service_title"
                         android:inputType="text"
                         style="@style/input_long"/>
 

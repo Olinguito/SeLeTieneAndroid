@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static com.android.volley.Response.ErrorListener;
 import static com.android.volley.Response.Listener;
@@ -100,7 +99,8 @@ public class RegisterActivity extends ChildActivity {
                                 Intent intent = new Intent(RegisterActivity.this, ItemListActivity.class);
                                 intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
-                            } catch (JSONException ignored) {}
+                            } catch (JSONException ignored) {
+                            }
                         }
                     }, new ErrorListener() {
                         @Override

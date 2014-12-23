@@ -46,18 +46,20 @@
 
                         <TextView
                                 android:id="@+id/profile_phone"
+                                android:text="---"
                                 style="@style/contactInfo.cell.topRight"/>
                     </TableRow>
 
                     <TableRow style="@style/contactInfo.row">
 
-                    <ImageView
-                    android:src="@drawable/mobile"
-                    style="@style/contactInfo.cell"/>
+                        <ImageView
+                                android:src="@drawable/mobile"
+                                style="@style/contactInfo.cell"/>
 
-                    <TextView
-                    android:text="---"
-                    style="@style/contactInfo.cell"/>
+                        <TextView
+                                android:id="@+id/profile_mobile"
+                                android:text="---"
+                                style="@style/contactInfo.cell"/>
                     </TableRow>
 
                     <TableRow style="@style/contactInfo.row">
@@ -66,7 +68,9 @@
                                 android:src="@drawable/mail"
                                 style="@style/contactInfo.cell.bottomLeft"/>
 
-                        <TextView android:id="@+id/profile_email" style="@style/contactInfo.cell.bottomRight"/>
+                        <TextView
+                                android:id="@+id/profile_email"
+                                style="@style/contactInfo.cell.bottomRight"/>
                     </TableRow>
                 </TableLayout>
 
@@ -90,12 +94,14 @@
                     android:gravity="top">
 
                 <Button
+                        android:onClick="openFavorites"
                         android:text="@string/profile.favorites"
                         android:id="@+id/button2"
                         style="@style/btn_long.fav"
                         />
 
                 <Button
+                        android:onClick="openRecents"
                         android:text="@string/profile.recents"
                         android:id="@+id/button3"
                         style="@style/btn_long.rec"/>

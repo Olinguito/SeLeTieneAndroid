@@ -31,7 +31,7 @@
                     android:id="@+id/reg_field_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:hint="@string/rl.name_hint"
                     android:inputType="textCapSentences"
                     />
@@ -46,7 +46,7 @@
                     android:id="@+id/reg_field_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:hint="@string/rl.email_hint"
                     android:inputType="textEmailAddress"
                     />
@@ -71,7 +71,7 @@
                     android:id="@+id/reg_field_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:hint="@string/rl.pass_hint"
                     android:inputType="textPassword"
                     />

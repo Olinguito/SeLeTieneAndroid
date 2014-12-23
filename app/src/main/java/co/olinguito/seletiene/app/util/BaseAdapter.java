@@ -2,22 +2,25 @@ package co.olinguito.seletiene.app.util;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public abstract class BaseAdapter extends RecyclerView.Adapter{
+public abstract class BaseAdapter extends RecyclerView.Adapter {
 
     //TODO remove when server can serve pictures
     public static final String RANDOM_IMAGE_GRID = "http://lorempixel.com/320/160/food";
     public static final String RANDOM_IMAGE_LIST = "http://lorempixel.com/200/200/food";
     protected final Context ctx;
     private final View mEmptyView;
+    protected ClickListener mClickListener;
 
     protected JSONArray mData;
 
     public BaseAdapter(Context context, View v) {
         this.ctx = context;
+        mClickListener = (ClickListener) context;
         mEmptyView = v;
         mData = new JSONArray();
         registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -40,7 +43,19 @@ public abstract class BaseAdapter extends RecyclerView.Adapter{
         return mData.length();
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected void checkEmpty() {
+        if (getItemCount() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
+    }
+
+    public interface ClickListener {
+        public void onItemClick(View v, JSONObject item);
+    }
+
+    protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ViewHolder(View view) {
             super(view);
@@ -49,15 +64,12 @@ public abstract class BaseAdapter extends RecyclerView.Adapter{
 
         @Override
         public void onClick(View v) {
-            Log.d("CLICK", "Item clicked");
-        }
-    }
-
-    protected void checkEmpty() {
-        if (getItemCount() == 0) {
-            mEmptyView.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyView.setVisibility(View.GONE);
+            try {
+                JSONObject item = mData.getJSONObject(getPosition());
+                mClickListener.onItemClick(v, item);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
