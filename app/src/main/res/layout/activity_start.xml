@@ -64,7 +64,7 @@
     <Button
             android:id="@+id/start_btn_offer"
             android:visibility="gone"
-            android:onClick="offer"
+            android:onClick="register"
             style="@style/start.offer"
             android:text="@string/start.offer"/>
 </LinearLayout>

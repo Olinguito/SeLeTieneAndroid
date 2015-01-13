@@ -22,7 +22,7 @@
     <string name="start.facebook">Ingresa con Facebook</string>
     <string name="start.email">Ingresa con Email</string>
     <string name="start.new">Nuevo Usuario</string>
-    <string name="start.offer">¿Tienes un producto o servivio?\nOfrécelo aquí</string>
+    <string name="start.offer">¿Tienes un producto o servivio que ofrecer?\nRegístrate</string>
 
     <!-- register/login -->
     <string name="rl.send">Enviar registro</string>

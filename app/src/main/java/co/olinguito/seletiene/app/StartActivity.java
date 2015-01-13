@@ -55,7 +55,4 @@ public class StartActivity extends FragmentActivity {
         startActivity(new Intent(this, LoginActivity.class));
     }
 
-    public void offer(View view) {
-        startActivity(new Intent(this, OfferActivity.class));
-    }
 }
