@@ -24,13 +24,14 @@ import java.util.Map;
 import static com.android.volley.Request.Method.*;
 
 public class Api {
-    public static final String BASE_URL = "http://seletiene.cloudapp.net";
+    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
     private static final String LOGIN_PARAM_EMAIL = "username";
     private static final String LOGIN_PARAM_PWD = "password";
     private static final int REQUEST_TIMEOUT = 2000;
     private static final int REQUEST_RETRY_COUNT = 2;
     private static final float REQUEST_BACKOFF_MULT = 1.4f;
     private static final Map<String, String> enpoints;
+
     static {
         Map<String, String> map = new HashMap<>();
         map.put("items", "/api/ProductServices?ignoreDPSValidation=true");
@@ -40,13 +41,17 @@ public class Api {
         map.put("favoriteUpdate", "/api/ProductServices/Favorite?productServiceId=");
         enpoints = Collections.unmodifiableMap(map);
     }
+
     private static RequestSingleton sRequestSingleton = RequestSingleton.getInstance(App.getContext());
     public static RequestQueue requestQueue = sRequestSingleton.getRequestQueue();
     private static SharedPreferences tokenPreference;
+
     static {
         tokenPreference = App.getContext().getSharedPreferences("TOKEN", Context.MODE_PRIVATE);
     }
+
     private static String authToken;
+
     static {
         authToken = tokenPreference.getString("token", "");
     }
