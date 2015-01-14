@@ -12,11 +12,11 @@ public class DefaultApiErrorHandler implements Response.ErrorListener {
     ProgressDialog mProgress;
 
     public DefaultApiErrorHandler(Context context) {
-        this(context, null);
+        mContext = context;
     }
 
-    public DefaultApiErrorHandler(Context context, ProgressDialog dialog) {
-        mContext = context;
+    public DefaultApiErrorHandler(ProgressDialog dialog) {
+        mContext = dialog.getContext();
         mProgress = dialog;
     }
 

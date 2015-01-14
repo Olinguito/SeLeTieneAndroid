@@ -1,7 +1,10 @@
 package co.olinguito.seletiene.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
@@ -10,26 +13,31 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.olinguito.seletiene.app.util.Api;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class OfferActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     public static final int PRODUCT = 0;
     public static final int SERVICE = 1;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static final int IMG_HEIGHT = 720;
+    public static final int IMG_WIDTH = 1280;
+    public static final String TMP_IMAGE = "pp.jpg";
 
     private ViewPager mViewPager;
     private int REQUEST_IMAGE_CAPTURE = 1;
-    private Button mTakePhotoBtn;
     // product fields
     private EditText mProductTitle;
     private ImageView mPhotoView;
@@ -38,11 +46,31 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     private EditText mServiceTitle;
     private EditText mServiceComment;
     private EditText mServiceTraining;
+    private File mPhotoFile = null;
+    // flag to keep file when rotating screen ir delete it if entering activity for new product
+    private boolean mRecycling = false;
+    // product photo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer);
+
+        if (savedInstanceState != null) mRecycling = savedInstanceState.getBoolean("recycling");
+        mPhotoFile = new File(getExternalCacheDir(), TMP_IMAGE);
+        if (!mRecycling) mPhotoFile.delete();
+
+        // product fields
+        mProductTitle = (EditText) findViewById(R.id.new_product_title);
+        mProductDesc = (EditText) findViewById(R.id.new_product_description);
+        // service fields
+        mServiceTitle = (EditText) findViewById(R.id.new_service_title);
+        mServiceComment = (EditText) findViewById(R.id.new_service_comments);
+        mServiceTraining = (EditText) findViewById(R.id.new_service_training);
+
+        mPhotoView = (ImageView) findViewById(R.id.new_product_photo);
+        if (mPhotoFile.exists())
+            mPhotoView.setImageBitmap(BitmapFactory.decodeFile(mPhotoFile.getAbsolutePath()));
         // use tabs in action bar - TODO: since its deprecated I should use something else
         final ActionBar actionbar = getSupportActionBar();
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -63,15 +91,6 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
             }
         });
 
-        mPhotoView = (ImageView) findViewById(R.id.new_product_photo);
-        mTakePhotoBtn = (Button) findViewById(R.id.take_photo);
-        // product fields
-        mProductTitle = (EditText) findViewById(R.id.new_product_title);
-        mProductDesc = (EditText) findViewById(R.id.new_product_description);
-        // service fields
-        mServiceTitle = (EditText) findViewById(R.id.new_service_title);
-        mServiceComment = (EditText) findViewById(R.id.new_service_comments);
-        mServiceTraining = (EditText) findViewById(R.id.new_service_training);
     }
 
     @Override
@@ -85,18 +104,43 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     public void takePhoto(View view) {
         Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (photoIntent.resolveActivity(getPackageManager()) != null) {
+            photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
             startActivityForResult(photoIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // camera capture succeed
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap image = (Bitmap) extras.get("data");
-            mPhotoView.setImageBitmap(image);
-            mTakePhotoBtn.setVisibility(View.GONE);
+            FileOutputStream outputStream = null;
+            Bitmap scaledPhoto;
+            try {
+                // take original photo
+                String path = mPhotoFile.getAbsolutePath();
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                // scale it down and save it to the same file
+                scaledPhoto = scaleCropToFit(bitmap, IMG_WIDTH, IMG_HEIGHT);
+                outputStream = new FileOutputStream(mPhotoFile);
+                scaledPhoto.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+                mRecycling = true;
+                mPhotoView.setImageBitmap(scaledPhoto);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (outputStream != null) outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("recycling", mRecycling);
     }
 
     public void offerService(View view) {
@@ -151,34 +195,81 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     public void sendData(final int type) {
         // set data to send
         JSONObject data = new JSONObject();
+        int creatingMsg = 0;
         try {
             data.put("type", type);
             if (type == PRODUCT) {
                 data.put("title", mProductTitle.getText());
                 data.put("description", mProductDesc.getText());
+                creatingMsg = R.string.offer_creating_product;
             } else if (type == SERVICE) {
                 data.put("title", mServiceTitle.getText());
-                data.put("description", mServiceComment.getText());
+                data.put("description", mServiceComment.getText() + "\n\n" + mServiceTraining.getText());
+                creatingMsg = R.string.offer_created_service;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        final ProgressDialog progress = ProgressDialog.show(this, "", getString(creatingMsg), true);
         // make API call
         Api.createProductOrService(data, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                int message = R.string.offer_created_product;
-                if (type == SERVICE) message = R.string.offer_created_service;
-                Log.d("OFFER>", response.toString());
-                Toast.makeText(OfferActivity.this, message, Toast.LENGTH_SHORT).show();
-                finish();
+                final int message = type == PRODUCT ? R.string.offer_created_product : R.string.offer_created_service;
+                // upload photo if type is product
+                if (type == PRODUCT && mPhotoFile.exists()) {
+                    progress.setMessage(getString(R.string.offer_uploading_pic));
+                    try {
+                        Api.uploadProductOrServicePhoto(response.getInt("id"), mPhotoFile, new Response.Listener<Object>() {
+                            @Override
+                            public void onResponse(Object response) {
+                                if (progress.isShowing()) progress.dismiss();
+                                Toast.makeText(OfferActivity.this, message, Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }, progress);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // finish activity and show success message
+                    if (progress.isShowing()) progress.dismiss();
+                    Toast.makeText(OfferActivity.this, message, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("OFFER>", error.toString());
-            }
-        });
+        }, progress);
+    }
+
+    // TODO: refactor out in its own file or utility library
+    public static Bitmap scaleCropToFit(Bitmap original, int targetWidth, int targetHeight) {
+        //Need to scale the image, keeping the aspect ration first
+        int width = original.getWidth();
+        int height = original.getHeight();
+
+        float widthScale = (float) targetWidth / (float) width;
+        float heightScale = (float) targetHeight / (float) height;
+        float scaledWidth;
+        float scaledHeight;
+
+        int startY = 0;
+        int startX = 0;
+
+        if (widthScale > heightScale) {
+            scaledWidth = targetWidth;
+            scaledHeight = height * widthScale;
+            //crop height by...
+            startY = (int) ((scaledHeight - targetHeight) / 2);
+        } else {
+            scaledHeight = targetHeight;
+            scaledWidth = width * heightScale;
+            //crop width by..
+            startX = (int) ((scaledWidth - targetWidth) / 2);
+        }
+
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(original, (int) scaledWidth, (int) scaledHeight, true);
+
+        return Bitmap.createBitmap(scaledBitmap, startX, startY, targetWidth, targetHeight);
     }
 
     @Override
@@ -199,7 +290,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            return (View) mViewPager.getChildAt(position);
+            return mViewPager.getChildAt(position);
         }
 
         @Override
@@ -209,7 +300,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
 
         @Override
         public boolean isViewFromObject(View view, Object o) {
-            return view == ((View) o);
+            return view == o;
         }
     }
 }

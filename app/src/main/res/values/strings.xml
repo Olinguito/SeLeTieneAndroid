@@ -57,6 +57,9 @@
     <string name="offer.training">Capacitaciones</string>
     <string name="offer.submit_product">Ofercer producto</string>
     <string name="offer.submit_service">Ofrecer servicio</string>
+    <string name="offer.creating_product">Creando Producto</string>
+    <string name="offer.creating_service">Creando Servicio</string>
+    <string name="offer.uploading_pic">Subiendo Imagen</string>
     <string name="offer.created_service">Tu servicio a sido creado con éxito</string>
     <string name="offer.created_product">Tu producto a sido creado con éxito</string>
 

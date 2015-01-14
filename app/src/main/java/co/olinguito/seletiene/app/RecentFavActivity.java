@@ -64,7 +64,7 @@ public class RecentFavActivity extends ChildActivity {
                 mList.setAdapter(new FavoritesAdapter(response));
                 if (mProgress.isShowing()) mProgress.dismiss();
             }
-        }, new DefaultApiErrorHandler(this, mProgress));
+        }, new DefaultApiErrorHandler(mProgress));
     }
 
     protected void loadRecents() {

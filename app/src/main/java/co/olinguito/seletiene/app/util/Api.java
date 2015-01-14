@@ -1,13 +1,11 @@
 package co.olinguito.seletiene.app.util;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import co.olinguito.seletiene.app.R;
 import com.android.volley.*;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
@@ -15,7 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,6 +37,7 @@ public class Api {
         map.put("me", "/api/Account");
         map.put("favorites", "/api/Account/Favorites");
         map.put("favoriteUpdate", "/api/ProductServices/Favorite?productServiceId=");
+        map.put("prodPhoto", "/api/ProductServices/Image?ProductoServicioId=");
         enpoints = Collections.unmodifiableMap(map);
     }
 
@@ -50,22 +49,22 @@ public class Api {
         tokenPreference = App.getContext().getSharedPreferences("TOKEN", Context.MODE_PRIVATE);
     }
 
-    private static String authToken;
+    public static String authToken;
 
     static {
         authToken = tokenPreference.getString("token", "");
     }
 
     public static void register(JSONObject data, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        JsonObjectRequest request = new Request(POST, url("me"), data, listener, errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(POST, url("me"), data, listener, errorListener);
         request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, 1));
         requestQueue.add(request);
     }
 
     public static void login(String email, String password, final Response.Listener<JSONObject> listener, final Response.ErrorListener errorListener) throws JSONException {
         final ArrayList<NameValuePair> data = new ArrayList<>();
-        data.add(new BasicNameValuePair(LOGIN_PARAM_EMAIL, (String) email));
-        data.add(new BasicNameValuePair(LOGIN_PARAM_PWD, (String) password));
+        data.add(new BasicNameValuePair(LOGIN_PARAM_EMAIL, email));
+        data.add(new BasicNameValuePair(LOGIN_PARAM_PWD, password));
         // needed for oauth2
         data.add(new BasicNameValuePair("grant_type", "password"));
         // Get authorization token then get the user profile
@@ -102,31 +101,36 @@ public class Api {
                 params.get("city"),
                 params.get("rating")
         );
-        ArrayRequest itemsRequest = new ArrayRequest(url("items"), listener, errorListener);
+        JsonArrayRequest itemsRequest = new JsonArrayRequest(url("items"), listener, errorListener);
 
         requestQueue.add(itemsRequest);
     }
 
-    public static void createProductOrService(JSONObject data, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        requestQueue.add(new Request(POST, url("items"), data, listener, errorListener));
+    public static void createProductOrService(JSONObject data, Response.Listener<JSONObject> listener, ProgressDialog progress) {
+        requestQueue.add(new JsonObjectRequest(POST, url("items"), data, listener, new DefaultApiErrorHandler(progress)));
+    }
+
+    public static void uploadProductOrServicePhoto(int id, File photo, Response.Listener<Object> listener, ProgressDialog progess) {
+        String PHOTO_URL = url("prodPhoto") + id;
+        requestQueue.add(new PhotoMultipartRequest<>(PHOTO_URL, photo, listener, new DefaultApiErrorHandler(progess)));
     }
 
     public static void getUserProfile(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        requestQueue.add(new Request(GET, url("me"), null, listener, errorListener));
+        requestQueue.add(new JsonObjectRequest(GET, url("me"), null, listener, errorListener));
     }
 
     public static com.android.volley.Request getUserFavorites(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        return requestQueue.add(new ArrayRequest(url("favorites"), listener, errorListener));
+        return requestQueue.add(new JsonArrayRequest(url("favorites"), listener, errorListener));
     }
 
     public static com.android.volley.Request addToFavorites(int id, Response.Listener<JSONObject> listener) {
         String url = url("favoriteUpdate") + id;
-        return requestQueue.add(new Request(PUT, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
+        return requestQueue.add(new JsonObjectRequest(PUT, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
     }
 
     public static com.android.volley.Request deleteFromFavorites(int id, Response.Listener<JSONObject> listener) {
         String url = url("favoriteUpdate") + id;
-        return requestQueue.add(new Request(DELETE, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
+        return requestQueue.add(new JsonObjectRequest(DELETE, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
     }
 
     private static String url(String endpoint) {
@@ -150,8 +154,6 @@ public class Api {
 
     /**
      * Generic way to handle network errors
-     *
-     * @param error
      */
     public static void handleResponseError(Context context, VolleyError error) {
         int errorString;
@@ -168,57 +170,5 @@ public class Api {
         else
             errorString = R.string.error_generic;
         Toast.makeText(context, errorString, Toast.LENGTH_LONG).show();
-    }
-
-    // custom json requests with auth headers
-
-    static class Request extends JsonObjectRequest {
-
-        public Request(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-            super(method, url, jsonRequest, listener, errorListener);
-            setRetryPolicy(new DefaultRetryPolicy(REQUEST_TIMEOUT, REQUEST_RETRY_COUNT, REQUEST_BACKOFF_MULT));
-        }
-
-        @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            HashMap<String, String> headers = new HashMap<>();
-            if (hasCredentials())
-                headers.put("Authorization", "Bearer " + authToken);
-            return headers;
-        }
-
-        /**
-         * Response accepts empty json bodies
-         */
-        @Override
-        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-            try {
-                String jsonString =
-                        new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                if (jsonString.isEmpty())
-                    return Response.success(new JSONObject(), HttpHeaderParser.parseCacheHeaders(response));
-                else
-                    return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
-            } catch (UnsupportedEncodingException e) {
-                return Response.error(new ParseError(e));
-            } catch (JSONException je) {
-                return Response.error(new ParseError(je));
-            }
-        }
-    }
-
-    static class ArrayRequest extends JsonArrayRequest {
-        public ArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-            super(url, listener, errorListener);
-            setRetryPolicy(new DefaultRetryPolicy(REQUEST_TIMEOUT, REQUEST_RETRY_COUNT, REQUEST_BACKOFF_MULT));
-        }
-
-        @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            HashMap<String, String> headers = new HashMap<>();
-            if (hasCredentials())
-                headers.put("Authorization", "Bearer " + authToken);
-            return headers;
-        }
     }
 }
