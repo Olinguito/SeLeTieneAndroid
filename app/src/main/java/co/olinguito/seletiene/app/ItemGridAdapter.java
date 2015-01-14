@@ -31,12 +31,12 @@ public class ItemGridAdapter extends BaseAdapter {
         GridViewHolder vh = (GridViewHolder) viewHolder;
         try {
             JSONObject item = mData.getJSONObject(i);
-            String title = (String) item.get("title");
-            int type = (int) item.get("type");
+            String title = item.getString("title");
+            int type = item.getInt("type");
 
             title = title.substring(0, 1).toUpperCase() + title.substring(1);
             vh.title.setText(title);
-            vh.name.setText((String) item.get("ownerName"));
+            vh.name.setText(item.getString("ownerName"));
             vh.rating.setRating(((Double) item.get("rating")).floatValue());
             if (type == TYPE_PRODUCT)
                 vh.image.setDefaultImageResId(R.drawable.product_img);

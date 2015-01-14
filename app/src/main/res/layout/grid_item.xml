@@ -27,7 +27,8 @@
             <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/g_picture"
                     android:scaleType="centerCrop"
-                    android:minHeight="80dp"
+                    android:maxHeight="100dp"
+                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

@@ -87,7 +87,7 @@ public class RegisterActivity extends ChildActivity {
                     Api.login((String) userData.get("email"), (String) userData.get("password"), new Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            progress.dismiss();
+                            if (progress.isShowing()) progress.dismiss();
                             try {
                                 // save user profile in shared preferences
                                 userManager.saveUser(new UserManager.User(
@@ -105,7 +105,7 @@ public class RegisterActivity extends ChildActivity {
                     }, new ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progress.dismiss();
+                            if (progress.isShowing()) progress.dismiss();
                             Api.handleResponseError(RegisterActivity.this, error);
                         }
                     });
@@ -115,7 +115,7 @@ public class RegisterActivity extends ChildActivity {
         }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progress.dismiss();
+                if (progress.isShowing()) progress.dismiss();
                 Log.e("REG", error.toString());
                 // when email already exist
                 if (error.networkResponse != null && error.networkResponse.statusCode == 409)

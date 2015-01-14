@@ -119,8 +119,7 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                 Api.login(mEmailView.getText().toString(), mPasswordView.getText().toString(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        if (progress.isShowing())
-                            progress.dismiss();
+                        if (progress.isShowing()) progress.dismiss();
                         // save user profile data in shared preferences
                         try {
                             userManager.saveUser(new UserManager.User(
@@ -138,7 +137,7 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progress.dismiss();
+                        if (progress.isShowing()) progress.dismiss();
                         Log.e("LOGIN", error.toString());
                         Api.handleResponseError(LoginActivity.this, error);
                     }
