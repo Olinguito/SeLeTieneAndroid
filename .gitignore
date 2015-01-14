@@ -4,4 +4,5 @@
 .navigation/
 .DS_Store
 /build
+facebook/build/
 *.iml
