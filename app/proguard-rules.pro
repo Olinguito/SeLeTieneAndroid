@@ -22,3 +22,5 @@
 -keep interface com.squareup.okhttp.** { *; }
 -dontwarn com.squareup.okhttp.**
 -dontwarn okio.**
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
