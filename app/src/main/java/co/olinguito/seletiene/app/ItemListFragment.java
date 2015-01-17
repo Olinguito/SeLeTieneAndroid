@@ -27,7 +27,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
     public static final int LIST_MODE = 1;
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private int mActivatedPosition = ListView.INVALID_POSITION;
-    private int mCurrentMode;
+    private int mCurrentMode = LIST_MODE;
 
     private SwipeRefreshLayout mSwipeLayout;
     private RecyclerView mList;
@@ -61,7 +61,6 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_list);
         mSwipeLayout.setColorSchemeResources(R.color.red1, R.color.red2, R.color.red3, R.color.red4);
         mSwipeLayout.setOnRefreshListener(this);
-        mSwipeLayout.setEnabled(true);
         // switch radio buttons
         RadioButton switchList = (RadioButton) view.findViewById(R.id.switch_list);
         RadioButton switchGrid = (RadioButton) view.findViewById(R.id.switch_grid);
@@ -73,6 +72,20 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         mGridAdapter = new ItemGridAdapter(getActivity(), emptyView);
         mLayoutManager = new GridLayoutManager(getActivity(), 1);
         mList = (RecyclerView) view.findViewById(R.id.items);
+        // fix on scroll up firing refresh
+        mList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int topRowVerticalPosition =
+                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                mSwipeLayout.setEnabled(topRowVerticalPosition >= 0);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
         mList.setLayoutManager(mLayoutManager);
         switchModeTo(mCurrentMode);
         if (mCurrentMode == LIST_MODE) {
