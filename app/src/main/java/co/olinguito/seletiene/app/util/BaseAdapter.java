@@ -10,8 +10,6 @@ import org.json.JSONObject;
 public abstract class BaseAdapter extends RecyclerView.Adapter {
 
     //TODO remove when server can serve pictures
-    public static final int TYPE_PRODUCT = 0;
-    public static final int TYPE_SERVICE = 1;
     protected final Context ctx;
     private final View mEmptyView;
     protected ClickListener mClickListener;

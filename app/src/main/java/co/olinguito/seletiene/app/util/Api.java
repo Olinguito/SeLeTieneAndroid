@@ -3,6 +3,7 @@ package co.olinguito.seletiene.app.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 import co.olinguito.seletiene.app.R;
 import com.android.volley.*;
@@ -14,15 +15,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.android.volley.Request.Method.*;
 
 public class Api {
     public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
+    public static final int TYPE_PRODUCT = 0;
+    public static final int TYPE_SERVICE = 1;
     private static final String LOGIN_PARAM_EMAIL = "username";
     private static final String LOGIN_PARAM_PWD = "password";
     private static final int REQUEST_TIMEOUT = 2000;
@@ -32,7 +32,7 @@ public class Api {
 
     static {
         Map<String, String> map = new HashMap<>();
-        map.put("items", "/api/ProductServices?ignoreDPSValidation=true");
+        map.put("items", "/api/ProductServices");
         map.put("token", "/token");
         map.put("me", "/api/Account");
         map.put("favorites", "/api/Account/Favorites");
@@ -95,14 +95,17 @@ public class Api {
         requestQueue.add(request);
     }
 
-    public static void getProductsAndServices(HashMap params, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        String uri = String.format("?type=%1$s&city=%2$s&rating=%3$s",
-                params.get("type"),
-                params.get("city"),
-                params.get("rating")
-        );
-        JsonArrayRequest itemsRequest = new JsonArrayRequest(url("items"), listener, errorListener);
+    public static void getProductsAndServices(HashMap<String, String> paramsMap, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        // TODO: remove when users can be validated
+        paramsMap.put("ignoreDPSValidation", "true");
 
+        ArrayList<NameValuePair> parameters = new ArrayList<>();
+        for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
+            parameters.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        }
+        String searchUrl = url("items") + "?" + URLEncodedUtils.format(parameters, "utf-8");
+
+        JsonArrayRequest itemsRequest = new JsonArrayRequest(searchUrl, listener, errorListener);
         requestQueue.add(itemsRequest);
     }
 

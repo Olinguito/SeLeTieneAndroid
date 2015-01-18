@@ -2,7 +2,6 @@ package co.olinguito.seletiene.app;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,10 +20,11 @@ import org.json.JSONArray;
 
 import java.util.HashMap;
 
-public class ItemListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ItemListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, FilterDialog.FilterListener {
 
     public static final int GRID_MODE = 0;
     public static final int LIST_MODE = 1;
+    public static final float DEFAULT_STARS = 3.0f;
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private int mActivatedPosition = ListView.INVALID_POSITION;
     private int mCurrentMode = LIST_MODE;
@@ -34,28 +34,44 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
     private ItemListAdapter mListAdapter;
     private ItemGridAdapter mGridAdapter;
     private GridLayoutManager mLayoutManager;
-    private Button mFilterBtn;
-    private HashMap mSearchParams;
+    private HashMap<String, String> mSearchParams = new HashMap<String, String>() {{
+        put("q", "");
+        put("minStars", String.valueOf(DEFAULT_STARS));
+        put("type", String.valueOf(Api.TYPE_PRODUCT));
+        put("order", "");
+    }};
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        // TODO: replace with a real list adapter.
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         // order spinner
+        final String[] orderValues = getResources().getStringArray(R.array.order_choices_vals);
         Spinner orderSpinner = (Spinner) view.findViewById(R.id.order_spinner);
-        ArrayAdapter<CharSequence> orderAdapter = ArrayAdapter.createFromResource(getActivity(),
+        final ArrayAdapter<CharSequence> orderAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.order_choices, R.layout.order_spinner_text);
         orderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         orderSpinner.setAdapter(orderAdapter);
+        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSearchParams.put("order", orderValues[position]);
+                requestItems();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("list>", "nada");
+            }
+        });
         // filter button
-        mFilterBtn = (Button) view.findViewById(R.id.filter_button);
+        Button mFilterBtn = (Button) view.findViewById(R.id.filter_button);
         mFilterBtn.setOnClickListener(this);
         // refresh view
         mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_list);
@@ -93,8 +109,6 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         } else {
             switchGrid.setChecked(true);
         }
-        // search params
-        mSearchParams = new HashMap();
         return view;
     }
 
@@ -108,7 +122,6 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         Api.getProductsAndServices(mSearchParams, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.d("R>>", response.toString());
                 mSwipeLayout.setRefreshing(false);
                 mGridAdapter.setData(response);
                 mListAdapter.setData(response);
@@ -142,7 +155,8 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
                 if (prev != null) ft.remove(prev);
                 ft.addToBackStack(null);
                 // Create and show the dialog.
-                DialogFragment filterDialog = new FilterDialog();
+                FilterDialog filterDialog = FilterDialog.newInstance(mSearchParams);
+                filterDialog.setFilterChangeListener(this);
                 filterDialog.show(ft, "dialog");
                 break;
         }
@@ -157,12 +171,6 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
             mLayoutManager.setSpanCount(getResources().getInteger(R.integer.column_count));
             mList.setAdapter(mGridAdapter);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        requestItems();
     }
 
 //    @Override
@@ -187,6 +195,12 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
         }
+    }
+
+    @Override
+    public void onFilterChange(HashMap<String, String> searchParams) {
+        mSearchParams = searchParams;
+        requestItems();
     }
 
     /**

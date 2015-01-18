@@ -40,9 +40,9 @@ public class ItemListAdapter extends BaseAdapter {
             vh.description.setText(item.getString("description"));
             vh.name.setText(item.getString("ownerName"));
             vh.rating.setRating(((Double) item.getDouble("rating")).floatValue());
-            if (type == TYPE_PRODUCT)
+            if (type == Api.TYPE_PRODUCT)
                 vh.image.setDefaultImageResId(R.drawable.product_img);
-            else if (type == TYPE_SERVICE)
+            else if (type == Api.TYPE_SERVICE)
                 vh.image.setDefaultImageResId(R.drawable.service_img);
             if (!item.isNull("imageFile"))
                 vh.image.setImageUrl(Api.BASE_URL + item.getString("imageFile"), RequestSingleton.getInstance(this.ctx).getImageLoader());

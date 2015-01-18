@@ -26,11 +26,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static co.olinguito.seletiene.app.util.Api.TYPE_PRODUCT;
+import static co.olinguito.seletiene.app.util.Api.TYPE_SERVICE;
+
 
 public class OfferActivity extends ActionBarActivity implements ActionBar.TabListener {
-
-    public static final int PRODUCT = 0;
-    public static final int SERVICE = 1;
 
     public static final int IMG_HEIGHT = 720;
     public static final int IMG_WIDTH = 1280;
@@ -82,7 +82,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
                 .setText(R.string.product).setTabListener(this));
         actionbar.addTab(actionbar.newTab()
                 .setText(R.string.service).setTabListener(this));
-        actionbar.setSelectedNavigationItem(PRODUCT);
+        actionbar.setSelectedNavigationItem(TYPE_PRODUCT);
 
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -144,7 +144,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     }
 
     public void offerService(View view) {
-        if (validService()) sendData(SERVICE);
+        if (validService()) sendData(TYPE_SERVICE);
     }
 
     public boolean validService() {
@@ -171,7 +171,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     }
 
     public void offerProduct(View view) {
-        if (validProduct()) sendData(PRODUCT);
+        if (validProduct()) sendData(TYPE_PRODUCT);
     }
 
     public boolean validProduct() {
@@ -198,11 +198,11 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
         int creatingMsg = 0;
         try {
             data.put("type", type);
-            if (type == PRODUCT) {
+            if (type == TYPE_PRODUCT) {
                 data.put("title", mProductTitle.getText());
                 data.put("description", mProductDesc.getText());
                 creatingMsg = R.string.offer_creating_product;
-            } else if (type == SERVICE) {
+            } else if (type == TYPE_SERVICE) {
                 data.put("title", mServiceTitle.getText());
                 data.put("description", mServiceComment.getText() + "\n\n" + mServiceTraining.getText());
                 creatingMsg = R.string.offer_created_service;
@@ -215,9 +215,9 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
         Api.createProductOrService(data, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                final int message = type == PRODUCT ? R.string.offer_created_product : R.string.offer_created_service;
+                final int message = type == TYPE_PRODUCT ? R.string.offer_created_product : R.string.offer_created_service;
                 // upload photo if type is product
-                if (type == PRODUCT && mPhotoFile.exists()) {
+                if (type == TYPE_PRODUCT && mPhotoFile.exists()) {
                     progress.setMessage(getString(R.string.offer_uploading_pic));
                     try {
                         Api.uploadProductOrServicePhoto(response.getInt("id"), mPhotoFile, new Response.Listener<Object>() {
