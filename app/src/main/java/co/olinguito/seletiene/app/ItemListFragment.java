@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.olinguito.seletiene.app.util.Api;
+import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
 import co.olinguito.seletiene.app.util.FilterDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -58,11 +59,12 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
                 R.array.order_choices, R.layout.order_spinner_text);
         orderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         orderSpinner.setAdapter(orderAdapter);
+        // order change
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mSearchParams.put("order", orderValues[position]);
-                requestItems();
+                requestItems(false);
             }
 
             @Override
@@ -114,11 +116,18 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onRefresh() {
-        requestItems();
+        requestItems(true);
     }
 
-    public void requestItems() {
+    public void requestItems(boolean refreshFavorites) {
         mSwipeLayout.setRefreshing(true);
+        if (refreshFavorites)
+            Api.getUserFavorites(new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray favorites) {
+                    Log.d("list", favorites.toString());
+                }
+            }, new DefaultApiErrorHandler(getActivity()));
         Api.getProductsAndServices(mSearchParams, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -200,7 +209,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onFilterChange(HashMap<String, String> searchParams) {
         mSearchParams = searchParams;
-        requestItems();
+        requestItems(false);
     }
 
     /**

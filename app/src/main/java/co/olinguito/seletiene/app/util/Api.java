@@ -109,6 +109,11 @@ public class Api {
         requestQueue.add(itemsRequest);
     }
 
+    public static void getProductOrService(int id, Response.Listener listener) {
+        String url = url("items") + "/" + id;
+        requestQueue.add(new JsonObjectRequest(GET, url, null, listener, new DefaultApiErrorHandler(App.getContext())));
+    }
+
     public static void createProductOrService(JSONObject data, Response.Listener<JSONObject> listener, ProgressDialog progress) {
         requestQueue.add(new JsonObjectRequest(POST, url("items"), data, listener, new DefaultApiErrorHandler(progress)));
     }

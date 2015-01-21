@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             style="@style/contactInfo.table"
+        >
+
+    <TableRow style="@style/contactInfo.row">
+
+        <ImageView
+                android:src="@drawable/phone"
+                style="@style/contactInfo.cell.topLeft"/>
+
+        <TextView
+                android:id="@+id/profile_phone"
+                android:text="---"
+                style="@style/contactInfo.cell.topRight"/>
+    </TableRow>
+
+    <TableRow style="@style/contactInfo.row">
+
+        <ImageView
+                android:src="@drawable/mobile"
+                style="@style/contactInfo.cell"/>
+
+        <TextView
+                android:id="@+id/profile_mobile"
+                android:text="---"
+                style="@style/contactInfo.cell"/>
+    </TableRow>
+
+    <TableRow style="@style/contactInfo.row">
+
+        <ImageView
+                android:src="@drawable/mail"
+                style="@style/contactInfo.cell.bottomLeft"/>
+
+        <TextView
+                android:id="@+id/profile_email"
+                android:text="---"
+                style="@style/contactInfo.cell.bottomRight"/>
+    </TableRow>
+</TableLayout>

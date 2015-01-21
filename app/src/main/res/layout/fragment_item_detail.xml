@@ -33,7 +33,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingTop="-3dp"
                     android:button="@drawable/btn_check_fav"
                     />
 
@@ -70,6 +71,45 @@
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/provider_details"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            <include layout="@layout/user_details"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:orientation="horizontal">
+
+                <Button
+                        android:text="Twitter"
+                        style="@style/btn"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="10"/>
+                <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        />
+
+                <Button
+                        android:text="Facebook"
+                        style="@style/btn"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="10"/>
+            </LinearLayout>
+        </LinearLayout>
+
         <!--push view-->
         <View
                 android:layout_width="match_parent"
@@ -77,6 +117,7 @@
                 android:layout_weight="1"/>
 
         <Button
+                android:id="@+id/detail_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/detail_contact_btn"

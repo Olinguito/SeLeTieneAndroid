@@ -30,8 +30,8 @@ public class UserManager {
             return new User(
                     mPreferences.getString("email", ""),
                     mPreferences.getString("name", ""),
-                    mPreferences.getString("phone", "---"),
-                    mPreferences.getString("mobile", "---")
+                    mPreferences.getString("phone", ""),
+                    mPreferences.getString("mobile", "")
             );
         else return null;
     }

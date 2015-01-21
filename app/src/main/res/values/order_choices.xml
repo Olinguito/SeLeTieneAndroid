@@ -4,10 +4,12 @@
         <item>stars</item>
         <item>lexic</item>
         <item>provider</item>
+        <item>date</item>
     </string-array>
     <string-array name="order_choices">
         <item>Por calificación</item>
         <item>De A-Z (producto)</item>
         <item>De A-Z (ofertante)</item>
+        <item>Fecha de creación</item>
     </string-array>
 </resources>

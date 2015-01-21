@@ -36,43 +36,7 @@
                         android:id="@+id/profile_name"
                         android:gravity="center"/>
 
-                <TableLayout style="@style/contactInfo.table">
-
-                    <TableRow style="@style/contactInfo.row">
-
-                        <ImageView
-                                android:src="@drawable/phone"
-                                style="@style/contactInfo.cell.topLeft"/>
-
-                        <TextView
-                                android:id="@+id/profile_phone"
-                                android:text="---"
-                                style="@style/contactInfo.cell.topRight"/>
-                    </TableRow>
-
-                    <TableRow style="@style/contactInfo.row">
-
-                        <ImageView
-                                android:src="@drawable/mobile"
-                                style="@style/contactInfo.cell"/>
-
-                        <TextView
-                                android:id="@+id/profile_mobile"
-                                android:text="---"
-                                style="@style/contactInfo.cell"/>
-                    </TableRow>
-
-                    <TableRow style="@style/contactInfo.row">
-
-                        <ImageView
-                                android:src="@drawable/mail"
-                                style="@style/contactInfo.cell.bottomLeft"/>
-
-                        <TextView
-                                android:id="@+id/profile_email"
-                                style="@style/contactInfo.cell.bottomRight"/>
-                    </TableRow>
-                </TableLayout>
+                <include layout="@layout/user_details" />
 
                 <Button
                         android:onClick="logout"

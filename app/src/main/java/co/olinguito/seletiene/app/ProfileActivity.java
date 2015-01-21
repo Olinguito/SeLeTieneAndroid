@@ -11,6 +11,7 @@ import co.olinguito.seletiene.app.util.UserManager;
 public class ProfileActivity extends ActionBarActivity {
 
     protected UserManager userManager;
+    private static String NULL_FIELD = "null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +22,14 @@ public class ProfileActivity extends ActionBarActivity {
         TextView phoneView = (TextView) findViewById(R.id.profile_phone);
         userManager = new UserManager(this);
         nameView.setText(userManager.getUser().getName());
-        emailView.setText(userManager.getUser().getEmail());
-//        phoneView.setText(userManager.getUser().getPhone());
+        String email = userManager.getUser().getEmail();
+        String phone = userManager.getUser().getPhone();
+        String mobile = userManager.getUser().getMobile();
+        emailView.setText(email);
+        if (phone != NULL_FIELD)
+            phoneView.setText(phone);
+        if (mobile != NULL_FIELD)
+            phoneView.setText(mobile);
     }
 
 
