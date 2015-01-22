@@ -10,10 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import co.olinguito.seletiene.app.util.Api;
-import co.olinguito.seletiene.app.util.ChildActivity;
-import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
-import co.olinguito.seletiene.app.util.RecentPnS;
+import co.olinguito.seletiene.app.util.*;
 import com.android.volley.Response;
 import com.android.volley.toolbox.NetworkImageView;
 import org.json.JSONArray;
@@ -147,6 +144,14 @@ public class RecentFavActivity extends ChildActivity {
                 name.setText(item.getString("ownerName"));
                 description.setText(item.getString("description"));
                 rating.setRating(((Double) item.get("rating")).floatValue());
+                // image
+                int type = item.getInt("type");
+                if (type == Api.TYPE_PRODUCT)
+                    image.setDefaultImageResId(R.drawable.product_img);
+                else if (type == Api.TYPE_SERVICE)
+                    image.setDefaultImageResId(R.drawable.service_img);
+                if (!item.isNull("imageFile"))
+                    image.setImageUrl(Api.BASE_URL + item.getString("imageFile"), RequestSingleton.getInstance(RecentFavActivity.this).getImageLoader());
             } catch (JSONException ignored) {
             }
             return vi;
