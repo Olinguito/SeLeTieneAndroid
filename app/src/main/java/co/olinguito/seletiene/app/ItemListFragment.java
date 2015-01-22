@@ -18,7 +18,10 @@ import co.olinguito.seletiene.app.util.FilterDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ItemListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, FilterDialog.FilterListener {
@@ -27,7 +30,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
     public static final int LIST_MODE = 1;
     public static final float DEFAULT_STARS = 3.0f;
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-    private int mActivatedPosition = ListView.INVALID_POSITION;
+    private ArrayList<Integer> mFavorites = new ArrayList<>();
     private int mCurrentMode = LIST_MODE;
 
     private SwipeRefreshLayout mSwipeLayout;
@@ -64,7 +67,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mSearchParams.put("order", orderValues[position]);
-                requestItems(false);
+                requestItems();
             }
 
             @Override
@@ -116,32 +119,32 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onRefresh() {
-        requestItems(true);
+        requestItems();
     }
 
-    public void requestItems(boolean refreshFavorites) {
+    public void requestItems() {
         mSwipeLayout.setRefreshing(true);
-        if (refreshFavorites)
-            Api.getUserFavorites(new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray favorites) {
-                    Log.d("list", favorites.toString());
-                }
-            }, new DefaultApiErrorHandler(getActivity()));
-        Api.getProductsAndServices(mSearchParams, new Response.Listener<JSONArray>() {
+        Api.getUserFavorites(new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
-                mSwipeLayout.setRefreshing(false);
-                mGridAdapter.setData(response);
-                mListAdapter.setData(response);
+            public void onResponse(JSONArray favorites) {
+                mFavorites = getFavoritesArray(favorites);
+                Api.getProductsAndServices(mSearchParams, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        mSwipeLayout.setRefreshing(false);
+                        JSONArray resultsWithFavorites = getResultsWithFavorites(response);
+                        mGridAdapter.setData(resultsWithFavorites);
+                        mListAdapter.setData(resultsWithFavorites);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mSwipeLayout.setRefreshing(false);
+                        Api.handleResponseError(getActivity(), error);
+                    }
+                });
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mSwipeLayout.setRefreshing(false);
-                Api.handleResponseError(getActivity(), error);
-            }
-        });
+        }, new DefaultApiErrorHandler(getActivity())); // TODO stop refreshing on error
     }
 
     @Override
@@ -198,18 +201,40 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
-            // Serialize and persist the activated item position.
-            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-        }
-    }
-
-    @Override
     public void onFilterChange(HashMap<String, String> searchParams) {
         mSearchParams = searchParams;
-        requestItems(false);
+        requestItems();
+    }
+
+    private ArrayList<Integer> getFavoritesArray(JSONArray results) {
+        ArrayList<Integer> favorites = new ArrayList<>();
+        try {
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject item = results.getJSONObject(i);
+                favorites.add(item.getInt("id"));
+            }
+        } catch (JSONException ignored) {
+        }
+        return favorites;
+    }
+
+    private JSONArray getResultsWithFavorites(JSONArray results) {
+        try {
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject item = results.getJSONObject(i);
+                item.put("favorite", isInFavorites(item.getInt("id")));
+                results.put(i, item);
+            }
+        } catch (JSONException ignored) {
+        }
+        return results;
+    }
+
+    private boolean isInFavorites(int id) {
+        for (int itemId : mFavorites) {
+            if (itemId == id) return true;
+        }
+        return false;
     }
 
     /**

@@ -72,7 +72,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                     public void onResponse(Object response) {
                         try {
                             JSONObject itemData = (JSONObject) response;
-                            JSONObject owner = (JSONObject) itemData.getJSONObject("owner");
+                            JSONObject owner = itemData.getJSONObject("owner");
                             String email = owner.getString("email");
                             String phone = owner.getString("phoneNumber");
                             String mobile = owner.getString("mobileNumber");
@@ -88,7 +88,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                     }
                 });
 
-                ((Button) rootView.findViewById(R.id.detail_contact)).setOnClickListener(this);
+                rootView.findViewById(R.id.detail_contact).setOnClickListener(this);
                 ((TextView) rootView.findViewById(R.id.detail_title)).setText(mItem.getString("title"));
                 ((TextView) rootView.findViewById(R.id.detail_owner)).setText(mItem.getString("ownerName"));
                 mDetailText = (TextView) rootView.findViewById(R.id.detail_description);
@@ -104,10 +104,11 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 if (!mItem.isNull("imageFile"))
                     image.setImageUrl(Api.BASE_URL + mItem.getString("imageFile"), RequestSingleton.getInstance(getActivity()).getImageLoader());
                 CheckBox fav = (CheckBox) rootView.findViewById(R.id.detail_favorite);
-                //TODO: check if already favorite
+                if (mItem.getBoolean("favorite"))
+                    fav.setChecked(true);
                 fav.setOnClickListener(this);
                 RatingBar rating = (RatingBar) rootView.findViewById(R.id.detail_rating);
-                rating.setNumStars(mItem.getInt("rating"));
+                rating.setRating(mItem.getInt("rating"));
             } catch (JSONException ignored) {
             }
         }
@@ -133,7 +134,6 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                         mFavRequest = Api.addToFavorites(itemId, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Log.d("DETAIL>", response.toString());
                                 mFavRequest = null;
                             }
                         });
@@ -141,7 +141,6 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                         mFavRequest = Api.deleteFromFavorites(itemId, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Log.d("DETAIL>", response.toString());
                                 mFavRequest = null;
                             }
                         });
