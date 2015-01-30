@@ -41,6 +41,7 @@ public class RegisterActivity extends ChildActivity {
     private EditText mConfirmPwdView;
     private Session.StatusCallback onFBLogin = new LoginCallback();
     private Button mSumbmitButton;
+    private int MIN_LENGHT = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +140,12 @@ public class RegisterActivity extends ChildActivity {
             focusView = mConfirmPwdView;
         }
         // validate password
-        if (TextUtils.isEmpty(mPwdView.getText())) {
+        String pass = mPwdView.getText().toString();
+        if (TextUtils.isEmpty(pass)) {
             mPwdView.setError(getString(R.string.error_field_required));
+            focusView = mPwdView;
+        } else if (pass.length() < MIN_LENGHT) {
+            mPwdView.setError(getString(R.string.error_invalid_password));
             focusView = mPwdView;
         }
         // validate email
