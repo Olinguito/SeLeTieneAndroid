@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="deparments">
+        <item>Todos los departamentos</item>
+        <item>Amazonas</item>
+        <item>Antioquia</item>
+        <item>Arauca</item>
+        <item>Atlántico</item>
+        <item>Bolívar</item>
+        <item>Boyacá</item>
+        <item>Caldas</item>
+        <item>Caquetá</item>
+        <item>Casanare</item>
+        <item>Cauca</item>
+        <item>Cesar</item>
+        <item>Chocó</item>
+        <item>Cundinamarca</item>
+        <item>Córdoba</item>
+        <item>Guainía</item>
+        <item>Guaviare</item>
+        <item>Huila</item>
+        <item>La Guajira</item>
+        <item>Magdalena</item>
+        <item>Meta</item>
+        <item>Nariño</item>
+        <item>Norte de Santander</item>
+        <item>Putumayo</item>
+        <item>Quindío</item>
+        <item>Risaralda</item>
+        <item>San Andrés</item>
+        <item>Santander</item>
+        <item>Sucre</item>
+        <item>Tolima</item>
+        <item>Valle del Cauca</item>
+        <item>Vaupés</item>
+        <item>Vichada</item>
+    </array>
+</resources>

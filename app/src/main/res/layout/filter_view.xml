@@ -32,7 +32,7 @@
             <TextView
                     style="@style/filter_text_label"
                     android:text="@string/filter.category"
-                    android:id="@+id/textView"/>
+                    />
 
             <RadioGroup
                     android:orientation="horizontal"
@@ -62,20 +62,24 @@
                         />
             </RadioGroup>
 
-            <!--<Spinner-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:prompt="@string/filter.city"-->
-                    <!--android:id="@+id/spinner"-->
-                    <!--android:layout_marginTop="15dp"-->
-                    <!--android:layout_marginBottom="15dp"-->
-                    <!--android:background="@drawable/btn_transp_border_blue"-->
-                    <!--android:layout_gravity="center_horizontal"/>-->
+            <TextView
+                    style="@style/filter_text_label"
+                    android:text="@string/filter.department"
+                    />
+
+            <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/filter.city"
+                    android:id="@+id/deparment"
+                    android:layout_gravity="center_horizontal"
+                    style="@style/input"
+                    />
 
             <TextView
                     style="@style/filter_text_label"
                     android:text="@string/filter.text"
-                    android:id="@+id/textView2"/>
+                    />
 
             <EditText
                     android:layout_width="match_parent"

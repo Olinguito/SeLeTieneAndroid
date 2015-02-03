@@ -82,6 +82,7 @@
     <string name="filter.all">Todos</string>
     <string name="filter.title">Filtrar búsqueda</string>
     <string name="filter.category">Seleccione la categoría</string>
+    <string name="filter.department">Seleccione un departamento</string>
     <string name="filter.text">Ingrese palabras clave</string>
     <string name="filter.text.hint">Ejm: Alimentos, Empanadas, Trigo</string>
     <string name="filter.city">Ciudad</string>
