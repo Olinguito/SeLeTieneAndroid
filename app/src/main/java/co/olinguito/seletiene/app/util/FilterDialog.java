@@ -89,7 +89,7 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        mParams.put("minStars", String.valueOf(mRatingBar.getRating()));
+        mParams.put("minStars", String.valueOf((int) Math.ceil(mRatingBar.getRating())));
         if (mProductCheck.isChecked())
             mParams.put("type", String.valueOf(TYPE_PRODUCT));
         else if (mServiceCheck.isChecked())
