@@ -83,6 +83,7 @@ public class RegisterActivity extends ChildActivity {
             @Override
             public void onResponse(JSONObject response) {
                 progress.setMessage(getString(R.string.rl_loging));
+                Toast.makeText(RegisterActivity.this, R.string.rl_user_created, Toast.LENGTH_LONG).show();
                 // Login after successfully creating the user
                 try {
                     Api.login((String) userData.get("email"), (String) userData.get("password"), new Listener<JSONObject>() {
@@ -118,6 +119,7 @@ public class RegisterActivity extends ChildActivity {
             public void onErrorResponse(VolleyError error) {
                 if (progress.isShowing()) progress.dismiss();
                 Log.e("REG", error.toString());
+//                Log.e("REG", String.valueOf(error.networkResponse.statusCode));
                 // when email already exist
                 if (error.networkResponse != null && error.networkResponse.statusCode == 409)
                     Toast.makeText(RegisterActivity.this, R.string.error_user_exists, Toast.LENGTH_LONG).show();

@@ -39,6 +39,7 @@
     <string name="rl.sign_in">Entrar</string>
     <string name="rl.fill_facebook">Llenar con datos de Facebook</string>
     <string name="rl.progress">Enviando datos al servidor</string>
+    <string name="rl.user_created">Usuario creado con éxito</string>
     <string name="rl.loging">Logueando usuario</string>
     <string name="error_invalid_email">Dirección de e-mail invalida</string>
     <string name="error_invalid_password">Contraseña muy corta</string>

@@ -3,7 +3,6 @@ package co.olinguito.seletiene.app.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 import co.olinguito.seletiene.app.R;
 import com.android.volley.*;
@@ -20,7 +19,7 @@ import java.util.*;
 import static com.android.volley.Request.Method.*;
 
 public class Api {
-    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
+    public static final String BASE_URL = "http://seletiene.cloudapp.net";
     public static final int TYPE_PRODUCT = 0;
     public static final int TYPE_SERVICE = 1;
     private static final String LOGIN_PARAM_EMAIL = "username";
@@ -55,9 +54,11 @@ public class Api {
         authToken = tokenPreference.getString("token", "");
     }
 
+    private static final int REGISTER_TIMEOUT = 22000; // it should be lower
+
     public static void register(JSONObject data, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest request = new JsonObjectRequest(POST, url("me"), data, listener, errorListener);
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, 1));
+        request.setRetryPolicy(new DefaultRetryPolicy(REGISTER_TIMEOUT, 1, 1));
         requestQueue.add(request);
     }
 
