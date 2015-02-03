@@ -78,6 +78,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- filter view -->
+    <string name="filter.all">Todos</string>
     <string name="filter.title">Filtrar búsqueda</string>
     <string name="filter.category">Seleccione la categoría</string>
     <string name="filter.text">Ingrese palabras clave</string>

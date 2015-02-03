@@ -41,7 +41,6 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
     private HashMap<String, String> mSearchParams = new HashMap<String, String>() {{
         put("q", "");
         put("minStars", String.valueOf(DEFAULT_STARS));
-        put("type", String.valueOf(Api.TYPE_PRODUCT));
         put("order", "");
     }};
 

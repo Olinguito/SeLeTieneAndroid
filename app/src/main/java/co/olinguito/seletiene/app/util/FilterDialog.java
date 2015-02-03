@@ -20,6 +20,7 @@ import static co.olinguito.seletiene.app.util.Api.TYPE_SERVICE;
 
 public class FilterDialog extends DialogFragment implements View.OnClickListener {
 
+    private RadioButton mAllCheck;
     private RadioButton mProductCheck;
     private RadioButton mServiceCheck;
     private RatingBar mRatingBar;
@@ -53,6 +54,7 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.filter_view, container, false);
+        mAllCheck = (RadioButton) view.findViewById(R.id.filter_all);
         mServiceCheck = (RadioButton) view.findViewById(R.id.filter_service);
         mProductCheck = (RadioButton) view.findViewById(R.id.filter_product);
         mRatingBar = (RatingBar) view.findViewById(R.id.filter_rating);
@@ -65,11 +67,18 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
     }
 
     private void setValues() {
-        int type = Integer.parseInt(mParams.get("type"));
+        int type;
+        if (mParams.containsKey("type"))
+            type = Integer.parseInt(mParams.get("type"));
+        else
+            type = -1;
+
         if (type == TYPE_PRODUCT)
             mProductCheck.setChecked(true);
         else if (type == Api.TYPE_SERVICE)
             mServiceCheck.setChecked(true);
+        else
+            mAllCheck.setChecked(true);
         mRatingBar.setRating(Float.parseFloat(mParams.get("minStars")));
         mQuery.setText(mParams.get("q"));
     }
@@ -85,6 +94,8 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
             mParams.put("type", String.valueOf(TYPE_PRODUCT));
         else if (mServiceCheck.isChecked())
             mParams.put("type", String.valueOf(TYPE_SERVICE));
+        else
+            mParams.remove("type");
         mParams.put("q", mQuery.getText().toString());
 
         if (mFilterListener != null)

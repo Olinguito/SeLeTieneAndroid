@@ -45,12 +45,20 @@
                         android:text="@string/product"
                         android:id="@+id/filter_product"
                         style="@style/filter_radiobtn.left"
+                        android:layout_marginRight="-1dp"
+                        />
+
+                <RadioButton
+                        android:text="@string/filter.all"
+                        android:id="@+id/filter_all"
+                        style="@style/filter_radiobtn.center"
                         />
 
                 <RadioButton
                         android:text="@string/service"
                         android:id="@+id/filter_service"
                         style="@style/filter_radiobtn.right"
+                        android:layout_marginLeft="-1dp"
                         />
             </RadioGroup>
 

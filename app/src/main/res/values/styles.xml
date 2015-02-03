@@ -226,7 +226,6 @@
     <style name="filter_radiobtn">
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
-        <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/main_white</item>
@@ -234,9 +233,15 @@
         <item name="android:button">@android:color/transparent</item>
     </style>
     <style name="filter_radiobtn.left">
+        <item name="android:layout_width">90dp</item>
         <item name="android:background">@drawable/radio_blue_left</item>
     </style>
     <style name="filter_radiobtn.right">
+        <item name="android:layout_width">90dp</item>
         <item name="android:background">@drawable/radio_blue_right</item>
+    </style>
+    <style name="filter_radiobtn.center">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:background">@drawable/radio_blue_center</item>
     </style>
 </resources>
