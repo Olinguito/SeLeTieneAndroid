@@ -3,18 +3,19 @@ package co.olinguito.seletiene.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import co.olinguito.seletiene.app.util.BaseAdapter;
 import co.olinguito.seletiene.app.util.RecentPnS;
 import co.olinguito.seletiene.app.util.UserManager;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ItemListActivity extends ActionBarActivity
         implements BaseAdapter.ClickListener {
 
+    private final int DETAIL_ACTIVITY_CODE = 69;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -22,7 +23,7 @@ public class ItemListActivity extends ActionBarActivity
     private boolean mTwoPane;
 
     @Override
-     protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
@@ -55,7 +56,16 @@ public class ItemListActivity extends ActionBarActivity
         } else {
             Intent detailIntent = new Intent(this, ItemDetailActivity.class);
             detailIntent.putExtra(ItemDetailFragment.JSON_OBJECT_STRING, item.toString());
-            startActivity(detailIntent);
+            startActivityForResult(detailIntent, DETAIL_ACTIVITY_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // request items when returning from detail activity to refresh favorites
+        if (requestCode == DETAIL_ACTIVITY_CODE) {
+            ItemListFragment fragment = (ItemListFragment) getSupportFragmentManager().findFragmentById(R.id.item_list);
+            fragment.requestItems();
         }
     }
 
