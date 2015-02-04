@@ -28,7 +28,7 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
 
     public static final int GRID_MODE = 0;
     public static final int LIST_MODE = 1;
-    public static final int DEFAULT_STARS = 2;
+    public static final int DEFAULT_STARS = 0;
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private ArrayList<Integer> mFavorites = new ArrayList<>();
     private int mCurrentMode = LIST_MODE;
