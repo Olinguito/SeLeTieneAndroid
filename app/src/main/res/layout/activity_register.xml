@@ -111,6 +111,23 @@
                     android:imeOptions="actionSend"
                     />
 
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="center"
+                    android:text="@string/rl.tos"
+                    />
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:gravity="center"
+                    android:onClick="openTos"
+                    android:clickable="true"
+                    android:text="@string/tos_label"
+                    />
         </LinearLayout>
     </ScrollView>
 

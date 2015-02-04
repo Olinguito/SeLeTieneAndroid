@@ -72,6 +72,12 @@
                     android:value="co.olinguito.seletiene.app.StartActivity"/>
         </activity>
 
+        <activity
+                android:name=".TosActivity"
+                android:label="@string/tos_label"
+                >
+        </activity>
+
         <!-- facebook login activity -->
         <activity android:name="com.facebook.LoginActivity"/>
         <activity

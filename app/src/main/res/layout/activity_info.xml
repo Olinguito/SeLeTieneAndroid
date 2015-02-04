@@ -58,6 +58,18 @@
         </LinearLayout>
 
         <TextView
+                android:background="@drawable/bg_white_round_border"
+                android:padding="20dp"
+                android:gravity="center"
+                android:text="@string/tos_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="openTos"
+                android:clickable="true"
+                />
+
+        <TextView
                 android:text="@string/team"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

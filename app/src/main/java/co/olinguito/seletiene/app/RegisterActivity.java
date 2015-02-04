@@ -239,6 +239,10 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    public void openTos(View view) {
+        startActivity(new Intent(this, TosActivity.class));
+    }
+
 
     private class LoginCallback implements Session.StatusCallback {
         @Override
