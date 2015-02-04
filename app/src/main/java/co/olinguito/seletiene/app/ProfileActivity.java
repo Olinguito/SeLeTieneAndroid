@@ -26,9 +26,9 @@ public class ProfileActivity extends ActionBarActivity {
         String phone = userManager.getUser().getPhone();
         String mobile = userManager.getUser().getMobile();
         emailView.setText(email);
-        if (phone != NULL_FIELD)
+        if (!(phone == NULL_FIELD || phone.isEmpty()))
             phoneView.setText(phone);
-        if (mobile != NULL_FIELD)
+        if (!(mobile == NULL_FIELD || mobile.isEmpty()))
             phoneView.setText(mobile);
     }
 
