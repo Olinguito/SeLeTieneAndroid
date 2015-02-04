@@ -12,12 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import co.olinguito.seletiene.app.util.Api;
 import co.olinguito.seletiene.app.util.ChildActivity;
+import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
 import co.olinguito.seletiene.app.util.UserManager;
 import com.android.volley.VolleyError;
 import com.facebook.Request;
@@ -25,15 +23,18 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.google.gson.JsonArray;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.android.volley.Response.ErrorListener;
 import static com.android.volley.Response.Listener;
 
-public class RegisterActivity extends ChildActivity {
+public class RegisterActivity extends ChildActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText mNameView;
     private EditText mEmailView;
@@ -42,6 +43,8 @@ public class RegisterActivity extends ChildActivity {
     private Session.StatusCallback onFBLogin = new LoginCallback();
     private Button mSumbmitButton;
     private int MIN_LENGHT = 6;
+    private Spinner mDepartment;
+    private Spinner mCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,14 @@ public class RegisterActivity extends ChildActivity {
         setContentView(R.layout.activity_register);
         mNameView = (EditText) findViewById(R.id.reg_field_name);
         mEmailView = (EditText) findViewById(R.id.reg_field_email);
+        mDepartment = (Spinner) findViewById(R.id.deparment);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.deparments, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDepartment.setAdapter(adapter);
+        mDepartment.setOnItemSelectedListener(this);
+        mCity = (Spinner) findViewById(R.id.city);
+        mCity.setEnabled(false);
+        mCity.setClickable(false);
         mPwdView = (EditText) findViewById(R.id.reg_field_pwd);
         mConfirmPwdView = (EditText) findViewById(R.id.reg_field_pwd_conf);
         mSumbmitButton = (Button) findViewById(R.id.reg_submitbutton);
@@ -78,6 +89,9 @@ public class RegisterActivity extends ChildActivity {
         userData.put("name", mNameView.getText().toString());
         userData.put("email", mEmailView.getText().toString());
         userData.put("password", mPwdView.getText().toString());
+        String city = mCity.getSelectedItem().toString();
+        if (!city.isEmpty())
+            userData.put("city", city);
         // Call endpoint to register user
         Api.register(userData, new Listener<JSONObject>() {
             @Override
@@ -150,6 +164,7 @@ public class RegisterActivity extends ChildActivity {
             mPwdView.setError(getString(R.string.error_invalid_password));
             focusView = mPwdView;
         }
+
         // validate email
         if (TextUtils.isEmpty(mEmailView.getText())) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -193,6 +208,35 @@ public class RegisterActivity extends ChildActivity {
         super.onActivityResult(requestCode, resultCode, data);
 //        if (Session.getActiveSession() != null)
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("REG>>", mDepartment.getAdapter().getItem(position).toString());
+        if (position != 0)
+            Api.getCitiesByDepartmentId(position, new Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    ArrayAdapter<String> citiesAdapter;
+                    ArrayList<String> cities = new ArrayList<>();
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject city = response.getJSONObject(i);
+                            cities.add(city.getString("name"));
+                        } catch (JSONException ignored) {
+                        }
+                    }
+                    citiesAdapter = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_dropdown_item, cities);
+                    mCity.setAdapter(citiesAdapter);
+                    mCity.setEnabled(true);
+                    mCity.setClickable(true);
+                    Log.d("REG>>", response.toString());
+                }
+            }, new DefaultApiErrorHandler(this));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
 

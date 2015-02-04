@@ -3,6 +3,7 @@ package co.olinguito.seletiene.app.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 import co.olinguito.seletiene.app.R;
 import com.android.volley.*;
@@ -19,7 +20,8 @@ import java.util.*;
 import static com.android.volley.Request.Method.*;
 
 public class Api {
-    public static final String BASE_URL = "http://seletiene.cloudapp.net";
+    //    public static final String BASE_URL = "http://seletiene.cloudapp.net";
+    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
     public static final int TYPE_PRODUCT = 0;
     public static final int TYPE_SERVICE = 1;
     private static final String LOGIN_PARAM_EMAIL = "username";
@@ -37,6 +39,7 @@ public class Api {
         map.put("favorites", "/api/Account/Favorites");
         map.put("favoriteUpdate", "/api/ProductServices/Favorite?productServiceId=");
         map.put("prodPhoto", "/api/ProductServices/Image?ProductoServicioId=");
+        map.put("citiesByDepartment", "/api/Departments/");
         enpoints = Collections.unmodifiableMap(map);
     }
 
@@ -99,7 +102,7 @@ public class Api {
     public static void getProductsAndServices(HashMap<String, String> paramsMap, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         // TODO: remove when users can be validated
         paramsMap.put("ignoreDPSValidation", "true");
-
+        Log.d("Api>>", paramsMap.toString());
         ArrayList<NameValuePair> parameters = new ArrayList<>();
         for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
             parameters.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
@@ -140,6 +143,19 @@ public class Api {
     public static com.android.volley.Request deleteFromFavorites(int id, Response.Listener<JSONObject> listener) {
         String url = url("favoriteUpdate") + id;
         return requestQueue.add(new JsonObjectRequest(DELETE, url, new JSONObject(), listener, new DefaultApiErrorHandler(App.getContext())));
+    }
+
+    public static com.android.volley.Request getCitiesByDepartmentId(int id, final Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        String url = url("citiesByDepartment") + id;
+        return requestQueue.add(new JsonObjectRequest(GET, url, new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    listener.onResponse(response.getJSONArray("cities"));
+                } catch (JSONException ignored) {
+                }
+            }
+        }, errorListener));
     }
 
     private static String url(String endpoint) {

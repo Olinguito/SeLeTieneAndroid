@@ -28,6 +28,8 @@
     <string name="rl.send">Enviar registro</string>
     <string name="rl.name">nombre</string>
     <string name="rl.email">email</string>
+    <string name="rl.department">departamento</string>
+    <string name="rl.city">ciudad</string>
     <string name="rl.phone">teléfono</string>
     <string name="rl.pass">contraseña</string>
     <string name="rl.pass_confirm">confirmar contraseña</string>
