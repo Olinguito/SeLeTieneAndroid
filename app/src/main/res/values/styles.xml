@@ -80,17 +80,14 @@
     </style>
     <style name="start.logo_container">
         <item name="android:layout_weight">1</item>
+        <item name="android:minHeight">200dp</item>
     </style>
     <style name="start.logo">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:src">@drawable/logo_med</item>
     </style>
     <style name="start.title">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_below">@+id/start_logo</item>
-        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textSize">40sp</item>
     </style>
     <style name="start.info">
@@ -126,6 +123,8 @@
         <item name="android:background">@drawable/btn_start_offer</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:layout_gravity">bottom</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginTop">10dp</item>
     </style>
 
     <!--item list-->
