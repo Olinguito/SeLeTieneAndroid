@@ -86,7 +86,6 @@
         </activity>
         <activity
                 android:name=".RecentFavActivity"
-                android:label="@string/title_activity_recents"
                 android:parentActivityName=".ProfileActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"

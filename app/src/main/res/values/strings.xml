@@ -109,7 +109,7 @@
     <string name="loading_fav">Cargando favoritos</string>
     <!-- detail -->
     <string name="detail_contact_btn">Contactar</string>
-    <string name="title_activity_recents">Recents</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="detail_message_fav_added">Añadido a favoritos</string>
+    <string name="detail_message_fav_deleted">Eliminado de favoritos</string>
 
 </resources>

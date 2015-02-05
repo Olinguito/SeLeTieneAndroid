@@ -134,6 +134,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                             @Override
                             public void onResponse(JSONObject response) {
                                 mFavRequest = null;
+                                Toast.makeText(getActivity(), R.string.detail_message_fav_added, Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {
@@ -141,6 +142,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                             @Override
                             public void onResponse(JSONObject response) {
                                 mFavRequest = null;
+                                Toast.makeText(getActivity(), R.string.detail_message_fav_deleted, Toast.LENGTH_LONG).show();
                             }
                         });
                     }
