@@ -31,7 +31,7 @@
     <string name="rl.department">departamento</string>
     <string name="rl.city">ciudad</string>
     <string name="rl.phone">teléfono</string>
-    <string name="rl.pass">contraseña</string>
+    <string name="rl.pass">contraseña (min. 6 caracteres)</string>
     <string name="rl.pass_confirm">confirmar contraseña</string>
     <string name="rl.name_hint">Nombre completo</string>
     <string name="rl.email_hint">ejemplo@undominio.com</string>
