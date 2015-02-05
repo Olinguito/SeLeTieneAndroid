@@ -30,7 +30,7 @@ public class RecentFavActivity extends ChildActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recent_fav);
-        int mode = getIntent().getIntExtra(MODE_TAG, 0);
+        final int mode = getIntent().getIntExtra(MODE_TAG, 0);
         mList = (ListView) findViewById(R.id.rec_fav_list);
         mList.setEmptyView(findViewById(R.id.empty_view));
         if (mode == FAV_MODE) {
@@ -47,6 +47,10 @@ public class RecentFavActivity extends ChildActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 JSONObject item = (JSONObject) parent.getItemAtPosition(position);
+                try {
+                    if (mode == FAV_MODE) item.put("favorite", true);
+                } catch (JSONException ignored) {
+                }
                 Intent intent = new Intent(getBaseContext(), ItemDetailActivity.class);
                 intent.putExtra(ItemDetailFragment.JSON_OBJECT_STRING, item.toString());
                 startActivity(intent);
