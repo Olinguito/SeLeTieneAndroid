@@ -89,8 +89,9 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
         userData.put("name", mNameView.getText().toString());
         userData.put("email", mEmailView.getText().toString());
         userData.put("password", mPwdView.getText().toString());
-        String city = mCity.getSelectedItem().toString();
-        if (!city.isEmpty())
+
+        Object city = mCity.getSelectedItem();
+        if (city != null && !city.toString().isEmpty())
             userData.put("city", city);
         // Call endpoint to register user
         Api.register(userData, new Listener<JSONObject>() {
