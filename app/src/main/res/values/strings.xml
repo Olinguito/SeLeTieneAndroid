@@ -28,13 +28,15 @@
     <string name="rl.send">Enviar registro</string>
     <string name="rl.name">nombre</string>
     <string name="rl.email">email</string>
+    <string name="rl.id">cédula</string>
+    <string name="rl.phone">teléfono</string>
     <string name="rl.department">departamento</string>
     <string name="rl.city">ciudad</string>
-    <string name="rl.phone">teléfono</string>
     <string name="rl.pass">contraseña (min. 6 caracteres)</string>
     <string name="rl.pass_confirm">confirmar contraseña</string>
     <string name="rl.name_hint">Nombre completo</string>
     <string name="rl.email_hint">ejemplo@undominio.com</string>
+    <string name="rl.id_hint">Cédula de ciudadanía</string>
     <string name="rl.phone_hint">Teléfono de contacto</string>
     <string name="rl.pass_hint">Ingrese su contraseña</string>
     <string name="rl.pass_conf_hint">Repita la contraseña</string>
@@ -47,6 +49,7 @@
     <string name="error_invalid_email">Dirección de e-mail invalida</string>
     <string name="error_invalid_password">Contraseña muy corta</string>
     <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_incorrect_phone">Teléfono incorrecto</string>
     <string name="error_field_required">Este campo es requerido</string>
     <string name="error_user_exists">Un usuario con el mismo Email ya existe</string>
 

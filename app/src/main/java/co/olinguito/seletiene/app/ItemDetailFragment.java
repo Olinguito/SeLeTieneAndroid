@@ -65,7 +65,6 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             try {
                 float elevation = getResources().getDimension(R.dimen.button_elevation);
                 int type = mItem.getInt("type");
-                Log.d("DETAIL>>", mItem.toString());
                 // provider info
                 Api.getProductOrService(mItem.getInt("id"), new Response.Listener() {
                     @Override
@@ -77,9 +76,9 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                             String phone = owner.getString("phoneNumber");
                             String mobile = owner.getString("mobileNumber");
                             ((TextView) rootView.findViewById(R.id.profile_email)).setText(email);
-                            if (!(phone == NULL_FIELD || phone.isEmpty()))
+                            if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL))
                                 ((TextView) rootView.findViewById(R.id.profile_phone)).setText(phone);
-                            if (!(mobile == NULL_FIELD || mobile.isEmpty()))
+                            if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL)))
                                 ((TextView) rootView.findViewById(R.id.profile_mobile)).setText(mobile);
 
                         } catch (JSONException ignored) {

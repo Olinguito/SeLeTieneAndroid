@@ -123,10 +123,11 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                         // save user profile data in shared preferences
                         try {
                             userManager.saveUser(new UserManager.User(
-                                    response.get("email").toString(),
-                                    response.get("name").toString(),
-                                    response.get("phoneNumber").toString(),
-                                    response.get("mobileNumber").toString()
+                                    response.getString("userId"),
+                                    response.getString("email"),
+                                    response.getString("name"),
+                                    response.getString("phoneNumber"),
+                                    response.getString("mobileNumber")
                             ));
                             Intent intent = new Intent(LoginActivity.this, ItemListActivity.class);
                             intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

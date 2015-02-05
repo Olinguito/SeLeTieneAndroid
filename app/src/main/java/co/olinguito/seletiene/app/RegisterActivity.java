@@ -40,6 +40,8 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
     private EditText mEmailView;
     private EditText mPwdView;
     private EditText mConfirmPwdView;
+    private EditText mIdView;
+    private EditText mPhoneView;
     private Session.StatusCallback onFBLogin = new LoginCallback();
     private Button mSumbmitButton;
     private int MIN_LENGHT = 6;
@@ -52,6 +54,8 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_register);
         mNameView = (EditText) findViewById(R.id.reg_field_name);
         mEmailView = (EditText) findViewById(R.id.reg_field_email);
+        mIdView = (EditText) findViewById(R.id.reg_field_id);
+        mPhoneView = (EditText) findViewById(R.id.reg_field_phone);
         mDepartment = (Spinner) findViewById(R.id.deparment);
         mDepartment.setFocusable(true);
         mDepartment.setFocusableInTouchMode(true);
@@ -92,6 +96,8 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
         final JSONObject userData = new JSONObject();
         userData.put("name", mNameView.getText().toString());
         userData.put("email", mEmailView.getText().toString());
+        userData.put("userId", mIdView.getText().toString());
+        userData.put("mobileNumber", mPhoneView.getText().toString());
         userData.put("password", mPwdView.getText().toString());
 
         Object city = mCity.getSelectedItem();
@@ -112,10 +118,11 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
                             try {
                                 // save user profile in shared preferences
                                 userManager.saveUser(new UserManager.User(
-                                        response.get("email").toString(),
-                                        response.get("name").toString(),
-                                        response.get("phoneNumber").toString(),
-                                        response.get("mobileNumber").toString()
+                                        response.getString("userId"),
+                                        response.getString("email"),
+                                        response.getString("name"),
+                                        response.getString("phoneNumber"),
+                                        response.getString("mobileNumber")
                                 ));
                                 Intent intent = new Intent(RegisterActivity.this, ItemListActivity.class);
                                 intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -138,7 +145,6 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
             public void onErrorResponse(VolleyError error) {
                 if (progress.isShowing()) progress.dismiss();
                 Log.e("REG", error.toString());
-//                Log.e("REG", String.valueOf(error.networkResponse.statusCode));
                 // when email already exist
                 if (error.networkResponse != null && error.networkResponse.statusCode == 409)
                     Toast.makeText(RegisterActivity.this, R.string.error_user_exists, Toast.LENGTH_LONG).show();
@@ -168,6 +174,21 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
         } else if (pass.length() < MIN_LENGHT) {
             mPwdView.setError(getString(R.string.error_invalid_password));
             focusView = mPwdView;
+        }
+
+        // validate phone
+        if (TextUtils.isEmpty(mPhoneView.getText())) {
+            mPhoneView.setError(getString(R.string.error_field_required));
+            focusView = mPhoneView;
+        } else if (!Patterns.PHONE.matcher(mPhoneView.getText()).matches()) {
+            mPhoneView.setError(getString(R.string.error_incorrect_phone));
+            focusView = mPhoneView;
+        }
+
+        // validate id
+        if (TextUtils.isEmpty(mIdView.getText())) {
+            mIdView.setError(getString(R.string.error_field_required));
+            focusView = mIdView;
         }
 
         // validate email
@@ -217,7 +238,6 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("REG>>", mDepartment.getAdapter().getItem(position).toString());
         if (position != 0)
             Api.getCitiesByDepartmentId(position, new Listener<JSONArray>() {
                 @Override
@@ -235,7 +255,6 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
                     mCity.setAdapter(citiesAdapter);
                     mCity.setEnabled(true);
                     mCity.setClickable(true);
-                    Log.d("REG>>", response.toString());
                 }
             }, new DefaultApiErrorHandler(this));
     }

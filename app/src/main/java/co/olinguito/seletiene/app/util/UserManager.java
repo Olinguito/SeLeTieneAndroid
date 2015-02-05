@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.IntentCompat;
-import android.util.Log;
 import co.olinguito.seletiene.app.StartActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +27,7 @@ public class UserManager {
         boolean login = mPreferences.getBoolean("login", false);
         if (login)
             return new User(
+                    mPreferences.getString("id", ""),
                     mPreferences.getString("email", ""),
                     mPreferences.getString("name", ""),
                     mPreferences.getString("phone", ""),
@@ -37,9 +37,11 @@ public class UserManager {
     }
 
     public void saveUser(User user) {
+        mEditor.putString("id", user.getId());
         mEditor.putString("email", user.getEmail());
         mEditor.putString("name", user.getName());
         mEditor.putString("phone", user.getPhone());
+        mEditor.putString("mobile", user.getMobile());
         mEditor.putBoolean("login", true);
         mEditor.apply();
     }
@@ -73,12 +75,14 @@ public class UserManager {
     }
 
     public static class User {
+        private String id;
         private String name;
         private String email;
         private String phone;
         private String mobile;
 
-        public User(String email, String name, String phone, String mobile) {
+        public User(String id, String email, String name, String phone, String mobile) {
+            this.id = id;
             this.name = name;
             this.email = email;
             this.phone = phone;
@@ -115,6 +119,15 @@ public class UserManager {
 
         public void setMobile(String mobile) {
             this.mobile = mobile;
+        }
+
+        public String getId() { return id; }
+
+        public void setId(String id) { this.id = id; }
+
+        @Override
+        public String toString() {
+            return String.format("User:{id: %s, name: %s, email: %s, phone: %s, mobile: %s}", id, name, email, phone, mobile);
         }
     }
 }

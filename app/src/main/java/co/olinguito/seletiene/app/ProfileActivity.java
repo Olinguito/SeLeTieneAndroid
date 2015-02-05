@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 import co.olinguito.seletiene.app.util.UserManager;
+import org.json.JSONObject;
 
 
 public class ProfileActivity extends ActionBarActivity {
@@ -21,14 +22,15 @@ public class ProfileActivity extends ActionBarActivity {
         TextView emailView = (TextView) findViewById(R.id.profile_email);
         TextView phoneView = (TextView) findViewById(R.id.profile_phone);
         userManager = new UserManager(this);
-        nameView.setText(userManager.getUser().getName());
-        String email = userManager.getUser().getEmail();
-        String phone = userManager.getUser().getPhone();
-        String mobile = userManager.getUser().getMobile();
+        UserManager.User user = userManager.getUser();
+        nameView.setText(user.getName());
+        String email = user.getEmail();
+        String phone = user.getPhone();
+        String mobile = user.getMobile();
         emailView.setText(email);
-        if (!(phone == NULL_FIELD || phone.isEmpty()))
+        if (!(phone.equals(NULL_FIELD) || phone.isEmpty() || phone.equals(JSONObject.NULL)))
             phoneView.setText(phone);
-        if (!(mobile == NULL_FIELD || mobile.isEmpty()))
+        if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL)))
             phoneView.setText(mobile);
     }
 
