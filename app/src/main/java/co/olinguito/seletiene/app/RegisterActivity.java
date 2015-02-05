@@ -53,11 +53,15 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
         mNameView = (EditText) findViewById(R.id.reg_field_name);
         mEmailView = (EditText) findViewById(R.id.reg_field_email);
         mDepartment = (Spinner) findViewById(R.id.deparment);
+        mDepartment.setFocusable(true);
+        mDepartment.setFocusableInTouchMode(true);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.deparments, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDepartment.setAdapter(adapter);
         mDepartment.setOnItemSelectedListener(this);
         mCity = (Spinner) findViewById(R.id.city);
+        mCity.setFocusable(true);
+        mCity.setFocusableInTouchMode(true);
         mCity.setEnabled(false);
         mCity.setClickable(false);
         mPwdView = (EditText) findViewById(R.id.reg_field_pwd);
