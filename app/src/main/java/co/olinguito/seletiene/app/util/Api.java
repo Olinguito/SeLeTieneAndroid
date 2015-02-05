@@ -20,8 +20,8 @@ import java.util.*;
 import static com.android.volley.Request.Method.*;
 
 public class Api {
-    //    public static final String BASE_URL = "http://seletiene.cloudapp.net";
-    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
+        public static final String BASE_URL = "http://seletiene.cloudapp.net";
+//    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
     public static final int TYPE_PRODUCT = 0;
     public static final int TYPE_SERVICE = 1;
     private static final String LOGIN_PARAM_EMAIL = "username";
@@ -40,6 +40,7 @@ public class Api {
         map.put("favoriteUpdate", "/api/ProductServices/Favorite?productServiceId=");
         map.put("prodPhoto", "/api/ProductServices/Image?ProductoServicioId=");
         map.put("citiesByDepartment", "/api/Departments/");
+        map.put("passReset", "/api/Account/RecoverPasswordEmail?email=");
         enpoints = Collections.unmodifiableMap(map);
     }
 
@@ -156,6 +157,11 @@ public class Api {
                 }
             }
         }, errorListener));
+    }
+
+    public static void resetPasword(String email,Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        String url = url("passReset") + email;
+        requestQueue.add(new JsonObjectRequest(POST, url, new JSONObject(), listener, errorListener));
     }
 
     private static String url(String endpoint) {

@@ -46,6 +46,8 @@
     <string name="rl.progress">Enviando datos al servidor</string>
     <string name="rl.user_created">Usuario creado con éxito</string>
     <string name="rl.loging">Logueando usuario</string>
+    <string name="rl.pass_reset">Olvide mi contraseña</string>
+    <string name="rl.pass_reset_message">Email enviado</string>
     <string name="error_invalid_email">Dirección de e-mail invalida</string>
     <string name="error_invalid_password">Contraseña muy corta</string>
     <string name="error_incorrect_password">Contraseña incorrecta</string>

@@ -56,6 +56,17 @@
                     android:maxLines="1"
                     android:singleLine="true"/>
 
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/rl.pass_reset"
+                    android:textColor="@color/main"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:clickable="true"
+                    android:onClick="resetPassword"
+                    />
+
 
         </LinearLayout>
     </ScrollView>

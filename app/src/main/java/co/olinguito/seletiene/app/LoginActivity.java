@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import co.olinguito.seletiene.app.util.Api;
 import co.olinguito.seletiene.app.util.ChildActivity;
+import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
 import co.olinguito.seletiene.app.util.UserManager;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -191,6 +192,18 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
         mEmailView.setAdapter(adapter);
+    }
+
+    public void resetPassword(View view) {
+        if (!TextUtils.isEmpty(mEmailView.getText()))
+            Api.resetPasword(mEmailView.getText().toString(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Toast.makeText(LoginActivity.this, R.string.rl_pass_reset_message, Toast.LENGTH_LONG).show();
+                }
+            }, new DefaultApiErrorHandler(this));
+        else
+            Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_LONG).show();
     }
 
     private interface ProfileQuery {
