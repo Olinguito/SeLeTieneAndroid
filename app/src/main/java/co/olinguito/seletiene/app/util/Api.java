@@ -41,6 +41,7 @@ public class Api {
         map.put("prodPhoto", "/api/ProductServices/Image?ProductoServicioId=");
         map.put("citiesByDepartment", "/api/Departments/");
         map.put("passReset", "/api/Account/RecoverPasswordEmail?email=");
+        map.put("rate", "/api/ProductServices/Rate?");
         enpoints = Collections.unmodifiableMap(map);
     }
 
@@ -157,6 +158,11 @@ public class Api {
                 }
             }
         }, errorListener));
+    }
+
+    public static void ratePS(int id, int rating, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        String url = url("rate") + "productServiceId=" + id + "&newRating=" + rating;
+        requestQueue.add(new JsonObjectRequest(PUT, url, new JSONObject(), listener, errorListener));
     }
 
     public static void resetPasword(String email,Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {

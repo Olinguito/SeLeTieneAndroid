@@ -113,5 +113,9 @@
     <string name="detail_contact_btn">Contactar</string>
     <string name="detail_message_fav_added">Añadido a favoritos</string>
     <string name="detail_message_fav_deleted">Eliminado de favoritos</string>
+    <string name="detail_message_rated">Calificato con éxito</string>
+    <string name="detail_alert_rate_title">Califica Usuario</string>
+    <string name="detail_alert_rate_ok">Entendido</string>
+    <string name="detail_alert_rate">No olvides calificar este usuario</string>
 
 </resources>

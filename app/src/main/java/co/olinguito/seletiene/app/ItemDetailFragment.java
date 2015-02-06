@@ -1,5 +1,7 @@
 package co.olinguito.seletiene.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -9,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.olinguito.seletiene.app.util.Api;
+import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
 import co.olinguito.seletiene.app.util.RequestSingleton;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +37,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     private View mProviderDetails;
     private TextView mDetailText;
     private static String NULL_FIELD = "null";
+    private RatingBar mRating;
 
 
     public ItemDetailFragment() {
@@ -106,8 +111,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 if (mItem.getBoolean("favorite"))
                     fav.setChecked(true);
                 fav.setOnClickListener(this);
-                RatingBar rating = (RatingBar) rootView.findViewById(R.id.detail_rating);
-                rating.setRating(mItem.getInt("rating"));
+                mRating = (RatingBar) rootView.findViewById(R.id.detail_rating);
+                mRating.setRating((float) mItem.getDouble("rating"));
             } catch (JSONException ignored) {
             }
         }
@@ -156,6 +161,37 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 mProviderDetails.setVisibility(View.VISIBLE);
                 button.setVisibility(View.GONE);
                 mDetailText.setVisibility(View.GONE);
+                // alert to remind to rate user
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.detail_alert_rate_title))
+                        .setMessage(getString(R.string.detail_alert_rate))
+                        .setPositiveButton(R.string.detail_alert_rate_ok, null)
+                        .show();
+                // enable rating bar
+                mRating.setIsIndicator(false);
+                // on rate change
+                mRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        mRating.setIsIndicator(true);
+                        int roundedRating = (int) Math.ceil(rating);
+                        try {
+                            Api.ratePS(mItem.getInt("id"), roundedRating, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(getActivity(), R.string.detail_message_rated, Toast.LENGTH_LONG).show();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    mRating.setIsIndicator(false);
+                                    Api.handleResponseError(getActivity(), error);
+                                }
+                            });
+                        } catch (JSONException ignored) {
+                        }
+                    }
+                });
                 break;
         }
     }
