@@ -1,9 +1,12 @@
 package co.olinguito.seletiene.app;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,27 +70,6 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             try {
                 float elevation = getResources().getDimension(R.dimen.button_elevation);
                 int type = mItem.getInt("type");
-                // provider info
-                Api.getProductOrService(mItem.getInt("id"), new Response.Listener() {
-                    @Override
-                    public void onResponse(Object response) {
-                        try {
-                            JSONObject itemData = (JSONObject) response;
-                            JSONObject owner = itemData.getJSONObject("owner");
-                            String email = owner.getString("email");
-                            String phone = owner.getString("phoneNumber");
-                            String mobile = owner.getString("mobileNumber");
-                            ((TextView) rootView.findViewById(R.id.profile_email)).setText(email);
-                            if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL))
-                                ((TextView) rootView.findViewById(R.id.profile_phone_edit)).setText(phone);
-                            if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL)))
-                                ((TextView) rootView.findViewById(R.id.profile_mobile_edit)).setText(mobile);
-
-                        } catch (JSONException ignored) {
-                        }
-
-                    }
-                });
 
                 rootView.findViewById(R.id.detail_contact).setOnClickListener(this);
                 ((TextView) rootView.findViewById(R.id.detail_title)).setText(mItem.getString("title"));
@@ -110,6 +92,37 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 fav.setOnClickListener(this);
                 mRating = (RatingBar) rootView.findViewById(R.id.detail_rating);
                 mRating.setRating((float) mItem.getDouble("rating"));
+                // contact info
+                final TextView phoneView = (TextView) rootView.findViewById(R.id.profile_phone_edit);
+                final TextView mobileView = (TextView) rootView.findViewById(R.id.profile_mobile_edit);
+                final TextView emailView = (TextView) rootView.findViewById(R.id.profile_email);
+                phoneView.setEnabled(true);
+                mobileView.setEnabled(true);
+                phoneView.setOnClickListener(this);
+                mobileView.setOnClickListener(this);
+                emailView.setOnClickListener(this);
+
+                // provider info
+                Api.getProductOrService(mItem.getInt("id"), new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        try {
+                            JSONObject itemData = (JSONObject) response;
+                            JSONObject owner = itemData.getJSONObject("owner");
+                            String email = owner.getString("email");
+                            String phone = owner.getString("phoneNumber");
+                            String mobile = owner.getString("mobileNumber");
+                            emailView.setText(email);
+                            if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL))
+                                phoneView.setText(phone);
+                            if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL)))
+                                mobileView.setText(mobile);
+
+                        } catch (JSONException ignored) {
+                        }
+
+                    }
+                });
             } catch (JSONException ignored) {
             }
         }
@@ -189,6 +202,21 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                         }
                     }
                 });
+                break;
+            case R.id.profile_email:
+                TextView emailView = (TextView) v;
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", emailView.getText().toString().trim(), null));
+                startActivity(intent);
+                break;
+            case R.id.profile_phone_edit:
+            case R.id.profile_mobile_edit:
+                String number = ((TextView) v).getText().toString().trim();
+                if (!TextUtils.isEmpty(number)) {
+                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                    phoneIntent.setData(Uri.parse("tel:" + number));
+                    startActivity(phoneIntent);
+                }
                 break;
         }
     }
