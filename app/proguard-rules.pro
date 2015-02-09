@@ -24,3 +24,4 @@
 -dontwarn okio.**
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
+-keep class android.support.v7.widget.SearchView { *; }
