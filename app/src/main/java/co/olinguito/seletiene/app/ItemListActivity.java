@@ -1,9 +1,12 @@
 package co.olinguito.seletiene.app;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +24,16 @@ public class ItemListActivity extends ActionBarActivity
      * device.
      */
     private boolean mTwoPane;
+    private ItemListFragment mListfragment;
+    private boolean mDidSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
+
+        mListfragment = (ItemListFragment) getSupportFragmentManager().findFragmentById(R.id.item_list);
+        handleIntent(getIntent());
 
         if (findViewById(R.id.item_detail_container) != null) {
             mTwoPane = true;
@@ -35,6 +43,23 @@ public class ItemListActivity extends ActionBarActivity
                     .findFragmentById(R.id.item_list))
                     .setActivateOnItemClick(true);
 */
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY).trim();
+            mListfragment.setSearchQuery(query);
+            mListfragment.requestItems();
+            mDidSearch = true;
+        } else {
+            mDidSearch = false;
         }
     }
 
@@ -64,14 +89,36 @@ public class ItemListActivity extends ActionBarActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // request items when returning from detail activity to refresh favorites
         if (requestCode == DETAIL_ACTIVITY_CODE) {
-            ItemListFragment fragment = (ItemListFragment) getSupportFragmentManager().findFragmentById(R.id.item_list);
-            fragment.requestItems();
+            mListfragment.requestItems();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        // do 'clean' search on search close
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                if (mDidSearch) {
+                    mListfragment.setSearchQuery("");
+                    mListfragment.requestItems();
+                    mDidSearch = false;
+                }
+                return true;
+            }
+        });
+
         return true;
     }
 

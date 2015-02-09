@@ -20,10 +20,15 @@
 
         <activity
                 android:name=".ItemListActivity"
-                android:label="@string/label_search">
+                android:label="@string/label_search"
+                android:launchMode="singleTop"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
+            <meta-data
+                    android:name="android.app.searchable"
+                    android:resource="@xml/searchable"/>
         </activity>
         <activity
                 android:name=".ItemDetailActivity"

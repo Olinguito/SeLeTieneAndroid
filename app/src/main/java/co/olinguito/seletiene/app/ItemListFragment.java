@@ -146,6 +146,11 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         }, new DefaultApiErrorHandler(getActivity())); // TODO stop refreshing on error
     }
 
+    // call from activity
+    public void setSearchQuery(String query) {
+        mSearchParams.put("q", query);
+    }
+
     @Override
     public void onClick(View view) {
         boolean checked;

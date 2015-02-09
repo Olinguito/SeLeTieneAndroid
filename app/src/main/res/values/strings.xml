@@ -86,6 +86,7 @@
     <string name="tos_label">Términos y condiciones</string>
 
     <!-- item list -->
+    <string name="search_hint">Ingresa palabras clave</string>
     <string name="list.empty">Ningun elemento para mostrar</string>
     <string name="list.filter">Filtrar busqueda</string>
     <string name="action_settings">Settings</string>
