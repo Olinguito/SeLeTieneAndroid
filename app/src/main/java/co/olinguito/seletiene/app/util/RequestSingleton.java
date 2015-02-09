@@ -2,6 +2,7 @@ package co.olinguito.seletiene.app.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.HurlStack;
@@ -25,31 +26,18 @@ public class RequestSingleton {
         mRequestQueue = getRequestQueue();
 
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> mCache = new LruCache<>(15);
+
             @Override
             public Bitmap getBitmap(String url) {
-                return null;
+                return mCache.get(url);
             }
 
             @Override
             public void putBitmap(String url, Bitmap bitmap) {
-
+                mCache.put(url, bitmap);
             }
         });
-//        mImageLoader = new ImageLoader(mRequestQueue,
-//                new ImageLoader.ImageCache() {
-//                    private final LruCache<String, Bitmap>
-//                            cache = new LruCache<String, Bitmap>(20);
-//
-//                    @Override
-//                    public Bitmap getBitmap(String url) {
-//                        return cache.get(url);
-//                    }
-//
-//                    @Override
-//                    public void putBitmap(String url, Bitmap bitmap) {
-//                        cache.put(url, bitmap);
-//                    }
-//                });
     }
 
     public static synchronized RequestSingleton getInstance(Context context) {

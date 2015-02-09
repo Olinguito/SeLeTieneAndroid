@@ -24,7 +24,8 @@
                 android:layout_weight="1"
                 >
 
-            <com.android.volley.toolbox.NetworkImageView
+            <co.olinguito.seletiene.app.util.RoundedImageView
+                    app:radius="3dp"
                     android:id="@+id/g_picture"
                     android:scaleType="centerCrop"
                     android:maxHeight="100dp"
