@@ -72,7 +72,9 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 int type = mItem.getInt("type");
 
                 rootView.findViewById(R.id.detail_contact).setOnClickListener(this);
-                ((TextView) rootView.findViewById(R.id.detail_title)).setText(mItem.getString("title"));
+                String title = mItem.getString("title");
+                title = title.substring(0, 1).toUpperCase() + title.substring(1);
+                ((TextView) rootView.findViewById(R.id.detail_title)).setText(title);
                 ((TextView) rootView.findViewById(R.id.detail_owner)).setText(mItem.getString("ownerName"));
                 mDetailText = (TextView) rootView.findViewById(R.id.detail_description);
                 mDetailText.setText(mItem.getString("description"));
