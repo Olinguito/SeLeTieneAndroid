@@ -15,13 +15,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.android.volley.Request.Method.*;
 
 public class Api {
-        public static final String BASE_URL = "http://seletiene.cloudapp.net";
-//    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
+    public static final String BASE_URL = "http://seletiene.cloudapp.net";
+    //    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
     public static final int TYPE_PRODUCT = 0;
     public static final int TYPE_SERVICE = 1;
     private static final String LOGIN_PARAM_EMAIL = "username";
@@ -165,10 +168,22 @@ public class Api {
         requestQueue.add(new JsonObjectRequest(PUT, url, new JSONObject(), listener, errorListener));
     }
 
-    public static void resetPasword(String email,Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public static void resetPasword(String email, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         String url = url("passReset") + email;
         requestQueue.add(new JsonObjectRequest(POST, url, new JSONObject(), listener, errorListener));
     }
+
+    public static void editUserField(String fieldName, String value, Response.Listener<JSONObject> listener) {
+        String url = url("me");
+        JSONObject data = new JSONObject();
+        try {
+            data.put(fieldName, value);
+        } catch (JSONException ignored) {
+        }
+        requestQueue.add(new JsonObjectRequest(PUT, url, data, listener, new DefaultApiErrorHandler(App.getContext())));
+    }
+
+    //
 
     private static String url(String endpoint) {
         return BASE_URL + enpoints.get(endpoint);

@@ -1,17 +1,14 @@
 package co.olinguito.seletiene.app;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import co.olinguito.seletiene.app.util.Api;
-import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
 import co.olinguito.seletiene.app.util.RequestSingleton;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -82,9 +79,9 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                             String mobile = owner.getString("mobileNumber");
                             ((TextView) rootView.findViewById(R.id.profile_email)).setText(email);
                             if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL))
-                                ((TextView) rootView.findViewById(R.id.profile_phone)).setText(phone);
+                                ((TextView) rootView.findViewById(R.id.profile_phone_edit)).setText(phone);
                             if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL)))
-                                ((TextView) rootView.findViewById(R.id.profile_mobile)).setText(mobile);
+                                ((TextView) rootView.findViewById(R.id.profile_mobile_edit)).setText(mobile);
 
                         } catch (JSONException ignored) {
                         }

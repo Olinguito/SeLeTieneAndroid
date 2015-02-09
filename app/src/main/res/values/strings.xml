@@ -106,6 +106,7 @@
     <string name="profile.favorites">Favoritos</string>
     <string name="profile.close">Cerrar sesión</string>
     <string name="profile.edit">Editar</string>
+    <string name="profile.edition_successful">Editado correctamente</string>
     <!--recent favorites-->
     <string name="loading_rec">Cargando recientes</string>
     <string name="loading_fav">Cargando favoritos</string>

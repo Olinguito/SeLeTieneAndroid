@@ -199,7 +199,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5dp</item>
-        <item name="android:ellipsize">marquee</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
     <style name="contactInfo.cell.topLeft">
         <item name="android:background">@drawable/bg_blue_topleft</item>

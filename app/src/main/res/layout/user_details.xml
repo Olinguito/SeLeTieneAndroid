@@ -9,10 +9,15 @@
                 android:src="@drawable/phone"
                 style="@style/contactInfo.cell.topLeft"/>
 
-        <TextView
-                android:id="@+id/profile_phone"
-                android:text="---"
-                style="@style/contactInfo.cell.topRight"/>
+
+        <EditText
+                android:hint="---"
+                android:focusable="false"
+                android:enabled="false"
+                android:inputType="phone"
+                style="@style/contactInfo.cell.topRight"
+                android:id="@+id/profile_phone_edit"/>
+
     </TableRow>
 
     <TableRow style="@style/contactInfo.row">
@@ -21,9 +26,12 @@
                 android:src="@drawable/mobile"
                 style="@style/contactInfo.cell"/>
 
-        <TextView
-                android:id="@+id/profile_mobile"
-                android:text="---"
+        <EditText
+                android:hint="---"
+                android:inputType="phone"
+                android:focusable="false"
+                android:enabled="false"
+                android:id="@+id/profile_mobile_edit"
                 style="@style/contactInfo.cell"/>
     </TableRow>
 
