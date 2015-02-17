@@ -2,8 +2,10 @@ package co.olinguito.seletiene.app;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
@@ -19,6 +21,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -38,6 +43,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     private TextView mDetailText;
     private static String NULL_FIELD = "null";
     private RatingBar mRating;
+    private String mTitle;
 
 
     public ItemDetailFragment() {
@@ -72,9 +78,9 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 int type = mItem.getInt("type");
 
                 rootView.findViewById(R.id.detail_contact).setOnClickListener(this);
-                String title = mItem.getString("title");
-                title = title.substring(0, 1).toUpperCase() + title.substring(1);
-                ((TextView) rootView.findViewById(R.id.detail_title)).setText(title);
+                mTitle = mItem.getString("title");
+                mTitle = mTitle.substring(0, 1).toUpperCase() + mTitle.substring(1);
+                ((TextView) rootView.findViewById(R.id.detail_title)).setText(mTitle);
                 ((TextView) rootView.findViewById(R.id.detail_owner)).setText(mItem.getString("ownerName"));
                 mDetailText = (TextView) rootView.findViewById(R.id.detail_description);
                 mDetailText.setText(mItem.getString("description"));
@@ -125,6 +131,9 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
 
                     }
                 });
+
+                // share
+                rootView.findViewById(R.id.detail_share).setOnClickListener(this);
             } catch (JSONException ignored) {
             }
         }
@@ -204,6 +213,31 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                         }
                     }
                 });
+                break;
+            case R.id.detail_share:
+                List<String> packageNames = new ArrayList<>();
+                packageNames.add("com.facebook.katana");
+                packageNames.add("com.twitter.android");
+                List<Intent> intentList = new ArrayList<>();
+                String textToShare = mTitle + ": \n" + mDetailText.getText().toString();
+
+                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                List<ResolveInfo> resInfo = getActivity().getPackageManager().queryIntentActivities(shareIntent, 0);
+                if (!resInfo.isEmpty()){
+                    for (ResolveInfo info : resInfo) {
+                        Intent targetedShare = new Intent(android.content.Intent.ACTION_SEND);
+                        targetedShare.setType("text/plain"); // put here your mime type
+                        if (packageNames.contains(info.activityInfo.packageName.toLowerCase())) {
+                            targetedShare.putExtra(Intent.EXTRA_TEXT, textToShare);
+                            targetedShare.setPackage(info.activityInfo.packageName.toLowerCase());
+                            intentList.add(targetedShare);
+                        }
+                    }
+                    Intent chooserIntent = Intent.createChooser(intentList.remove(0), getResources().getString(R.string.detail_share));
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+                    startActivity(chooserIntent);
+                }
                 break;
             case R.id.profile_email:
                 TextView emailView = (TextView) v;

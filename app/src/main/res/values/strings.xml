@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="version">1.0.0-preview</string>
+    <string name="version">1.0.0</string>
     <string name="fb_app_id">627683907348233</string>
     <string name="app_name">¡Se le tiene!</string>
     <string name="label_search">Busqueda</string>
@@ -113,6 +113,7 @@
     <string name="loading_fav">Cargando favoritos</string>
     <!-- detail -->
     <string name="detail_contact_btn">Contactar</string>
+    <string name="detail_share">Compartir</string>
     <string name="detail_message_fav_added">Añadido a favoritos</string>
     <string name="detail_message_fav_deleted">Eliminado de favoritos</string>
     <string name="detail_message_rated">Calificato con éxito</string>
