@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,9 +235,17 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                             intentList.add(targetedShare);
                         }
                     }
-                    Intent chooserIntent = Intent.createChooser(intentList.remove(0), getResources().getString(R.string.detail_share));
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
-                    startActivity(chooserIntent);
+                    if (!intentList.isEmpty()) {
+                        Intent chooserIntent = Intent.createChooser(intentList.remove(0), getResources().getString(R.string.detail_share));
+                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+                        startActivity(chooserIntent);
+                    } else {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.detail_share)
+                                .setMessage(R.string.detail_share_error)
+                                .setPositiveButton(android.R.string.yes, null)
+                                .show();
+                    }
                 }
                 break;
             case R.id.profile_email:

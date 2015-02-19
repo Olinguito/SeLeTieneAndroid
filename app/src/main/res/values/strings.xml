@@ -114,6 +114,7 @@
     <!-- detail -->
     <string name="detail_contact_btn">Contactar</string>
     <string name="detail_share">Compartir</string>
+    <string name="detail_share_error">Instala facebook o twitter para poder compartir.</string>
     <string name="detail_message_fav_added">Añadido a favoritos</string>
     <string name="detail_message_fav_deleted">Eliminado de favoritos</string>
     <string name="detail_message_rated">Calificato con éxito</string>
