@@ -23,7 +23,6 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.google.gson.JsonArray;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,11 +93,11 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
         final ProgressDialog progress = ProgressDialog.show(this, "", getString(R.string.rl_progress), true);
         // Form data
         final JSONObject userData = new JSONObject();
-        userData.put("name", mNameView.getText().toString());
-        userData.put("email", mEmailView.getText().toString());
-        userData.put("userId", mIdView.getText().toString());
-        userData.put("mobileNumber", mPhoneView.getText().toString());
-        userData.put("password", mPwdView.getText().toString());
+        userData.put("name", mNameView.getText().toString().trim());
+        userData.put("email", mEmailView.getText().toString().trim());
+        userData.put("userId", mIdView.getText().toString().trim());
+        userData.put("mobileNumber", mPhoneView.getText().toString().trim());
+        userData.put("password", mPwdView.getText().toString().trim());
 
         Object city = mCity.getSelectedItem();
         if (city != null && !city.toString().isEmpty())

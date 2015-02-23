@@ -15,7 +15,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 import co.olinguito.seletiene.app.util.Api;
 import com.android.volley.Response;
 import org.json.JSONException;
@@ -199,12 +202,15 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
         try {
             data.put("type", type);
             if (type == TYPE_PRODUCT) {
-                data.put("title", mProductTitle.getText());
-                data.put("description", mProductDesc.getText());
+                data.put("title", mProductTitle.getText().toString().trim());
+                data.put("description", mProductDesc.getText().toString().trim());
                 creatingMsg = R.string.offer_creating_product;
             } else if (type == TYPE_SERVICE) {
-                data.put("title", mServiceTitle.getText());
-                data.put("description", mServiceComment.getText() + "\n\n" + mServiceTraining.getText());
+                data.put("title", mServiceTitle.getText().toString().trim());
+                data.put("description",
+                        mServiceComment.getText().toString().trim()
+                        + "\n" +
+                        mServiceTraining.getText().toString().trim());
                 creatingMsg = R.string.offer_created_service;
             }
         } catch (JSONException e) {
