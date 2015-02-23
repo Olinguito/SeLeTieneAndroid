@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +44,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     private static String NULL_FIELD = "null";
     private RatingBar mRating;
     private String mTitle;
+    private String mOwnerName;
+    private String mShareTel = "---";
 
 
     public ItemDetailFragment() {
@@ -82,7 +83,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 mTitle = mItem.getString("title");
                 mTitle = mTitle.substring(0, 1).toUpperCase() + mTitle.substring(1);
                 ((TextView) rootView.findViewById(R.id.detail_title)).setText(mTitle);
-                ((TextView) rootView.findViewById(R.id.detail_owner)).setText(mItem.getString("ownerName"));
+                mOwnerName = mItem.getString("ownerName");
+                ((TextView) rootView.findViewById(R.id.detail_owner)).setText(mOwnerName);
                 mDetailText = (TextView) rootView.findViewById(R.id.detail_description);
                 mDetailText.setText(mItem.getString("description"));
                 ViewCompat.setElevation(rootView.findViewById(R.id.detail_image_container), elevation);
@@ -122,10 +124,14 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                             String phone = owner.getString("phoneNumber");
                             String mobile = owner.getString("mobileNumber");
                             emailView.setText(email);
-                            if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL))
+                            if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL)){
                                 phoneView.setText(phone);
-                            if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL)))
+                                mShareTel = phone;
+                            }
+                            if (!(mobile.equals(NULL_FIELD) || mobile.isEmpty() || mobile.equals(JSONObject.NULL))){
                                 mobileView.setText(mobile);
+                                mShareTel = mobile;
+                            }
 
                         } catch (JSONException ignored) {
                         }
@@ -220,7 +226,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 packageNames.add("com.facebook.katana");
                 packageNames.add("com.twitter.android");
                 List<Intent> intentList = new ArrayList<>();
-                String textToShare = mTitle + ": \n" + mDetailText.getText().toString();
+                String textToShare = getActivity().getResources().getString(R.string.detail_share_msg);
+                textToShare = String.format(textToShare, mOwnerName.trim(), mTitle.trim(), mShareTel);
 
                 Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
