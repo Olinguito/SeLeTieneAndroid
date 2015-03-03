@@ -61,7 +61,6 @@
         <activity
                 android:name=".RegisterActivity"
                 android:label="@string/label_register"
-                android:noHistory="true"
                 android:parentActivityName=".StartActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
