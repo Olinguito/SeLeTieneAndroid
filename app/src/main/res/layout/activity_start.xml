@@ -61,7 +61,11 @@
                 style="@style/start.btn_container"
                 android:visibility="gone">
 
-            <!--<Button android:text="@string/start.facebook" style="@style/start.btn"/>-->
+            <Button
+                    android:id="@+id/loginFb_btn"
+                    android:onClick="loginFB"
+                    android:text="@string/start.facebook"
+                    style="@style/start.btn"/>
             <Button
                     android:id="@+id/login_btn"
                     android:onClick="login"

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 import co.olinguito.seletiene.app.R;
-import com.android.volley.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
@@ -39,6 +38,7 @@ public class Api {
         map.put("items", "/api/ProductServices");
         map.put("token", "/token");
         map.put("me", "/api/Account");
+        map.put("fb", "/api/Account/FacebookLogin");
         map.put("favorites", "/api/Account/Favorites");
         map.put("favoriteUpdate", "/api/ProductServices/Favorite?productServiceId=");
         map.put("prodPhoto", "/api/ProductServices/Image?ProductoServicioId=");
@@ -102,6 +102,22 @@ public class Api {
         };
         request.setRetryPolicy(new DefaultRetryPolicy(REQUEST_TIMEOUT, REQUEST_RETRY_COUNT, REQUEST_BACKOFF_MULT));
         requestQueue.add(request);
+    }
+
+    public static void loginFB(JSONObject data, final Response.Listener<JSONObject> listener, final Response.ErrorListener errorListener) {
+        Log.d("FB>>", data.toString());
+        requestQueue.add(new JsonObjectRequest(POST, url("fb"), data, new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    setCredentials((String) response.get("access_token"));
+                } catch (JSONException error) {
+                    clearCredentials();
+                } finally {
+                    Api.getUserProfile(listener, errorListener);
+                }
+            }
+        }, errorListener));
     }
 
     public static void getProductsAndServices(HashMap<String, String> paramsMap, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
