@@ -23,8 +23,8 @@ import java.util.Map;
 import static com.android.volley.Request.Method.*;
 
 public class Api {
-    public static final String BASE_URL = "http://seletiene.cloudapp.net";
-    //    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
+    //    public static final String BASE_URL = "http://seletiene.cloudapp.net";
+    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
     public static final int TYPE_PRODUCT = 0;
     public static final int TYPE_SERVICE = 1;
     private static final String LOGIN_PARAM_EMAIL = "username";
