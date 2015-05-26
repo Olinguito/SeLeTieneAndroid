@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -50,18 +51,13 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     private EditText mServiceComment;
     private EditText mServiceTraining;
     private File mPhotoFile = null;
-    // flag to keep file when rotating screen ir delete it if entering activity for new product
-    private boolean mRecycling = false;
-    // product photo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer);
 
-        if (savedInstanceState != null) mRecycling = savedInstanceState.getBoolean("recycling");
         mPhotoFile = new File(getExternalCacheDir(), TMP_IMAGE);
-        if (!mRecycling) mPhotoFile.delete();
 
         // product fields
         mProductTitle = (EditText) findViewById(R.id.new_product_title);
@@ -126,7 +122,6 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
                 scaledPhoto = scaleCropToFit(bitmap, IMG_WIDTH, IMG_HEIGHT);
                 outputStream = new FileOutputStream(mPhotoFile);
                 scaledPhoto.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
-                mRecycling = true;
                 mPhotoView.setImageBitmap(scaledPhoto);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -141,9 +136,11 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("recycling", mRecycling);
+    public void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            mPhotoFile.delete();
+        }
     }
 
     public void offerService(View view) {
