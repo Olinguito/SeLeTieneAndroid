@@ -62,7 +62,7 @@
                         />
             </RadioGroup>
 
-            <TextView
+            <!--<TextView
                     style="@style/filter_text_label"
                     android:text="@string/filter.department"
                     />
@@ -74,7 +74,7 @@
                     android:id="@+id/deparment"
                     android:layout_gravity="center_horizontal"
                     style="@style/input"
-                    />
+                    />-->
 
             <TextView
                     style="@style/filter_text_label"

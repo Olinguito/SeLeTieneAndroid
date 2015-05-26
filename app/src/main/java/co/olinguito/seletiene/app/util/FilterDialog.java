@@ -53,10 +53,10 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.filter_view, container, false);
-        mDepartment = (Spinner) view.findViewById(R.id.deparment);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.deparments, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mDepartment.setAdapter(adapter);
+//        mDepartment = (Spinner) view.findViewById(R.id.deparment);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.deparments, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mDepartment.setAdapter(adapter);
         mAllCheck = (RadioButton) view.findViewById(R.id.filter_all);
         mServiceCheck = (RadioButton) view.findViewById(R.id.filter_service);
         mProductCheck = (RadioButton) view.findViewById(R.id.filter_product);
@@ -86,11 +86,11 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
         mQuery.setText(mParams.get("q"));
         //
 
-        int department;
-        if (mParams.containsKey("departmentId"))
-            department = Integer.parseInt(mParams.get("departmentId"));
-        else department = 0;
-        mDepartment.setSelection(department);
+//        int department;
+//        if (mParams.containsKey("departmentId"))
+//            department = Integer.parseInt(mParams.get("departmentId"));
+//        else department = 0;
+//        mDepartment.setSelection(department);
     }
 
     public void setFilterChangeListener(FilterListener listener) {
@@ -108,11 +108,11 @@ public class FilterDialog extends DialogFragment implements View.OnClickListener
             mParams.remove("type");
         mParams.put("q", mQuery.getText().toString());
         //
-        int departmentId = mDepartment.getSelectedItemPosition();
-        if (departmentId == 0)
-            mParams.remove("departmentId");
-        else
-            mParams.put("departmentId", String.valueOf(departmentId));
+        //int departmentId = mDepartment.getSelectedItemPosition();
+        //if (departmentId == 0)
+        //    mParams.remove("departmentId");
+        //else
+        //    mParams.put("departmentId", String.valueOf(departmentId));
 
         if (mFilterListener != null)
             mFilterListener.onFilterChange(mParams);
