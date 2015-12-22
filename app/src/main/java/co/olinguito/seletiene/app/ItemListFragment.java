@@ -215,9 +215,10 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         try {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject item = results.getJSONObject(i);
-                favorites.add(item.getInt("id"));
+                favorites.add(item.getInt("Id"));
             }
-        } catch (JSONException ignored) {
+        } catch (JSONException e) {
+            Log.e("JSON_ERROR>", e.getMessage());
         }
         return favorites;
     }
@@ -226,10 +227,11 @@ public class ItemListFragment extends Fragment implements View.OnClickListener, 
         try {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject item = results.getJSONObject(i);
-                item.put("favorite", isInFavorites(item.getInt("id")));
+                item.put("Favorite", isInFavorites(item.getInt("Id")));
                 results.put(i, item);
             }
-        } catch (JSONException ignored) {
+        } catch (JSONException e) {
+            Log.e("JSON_ERROR>", e.getMessage());
         }
         return results;
     }

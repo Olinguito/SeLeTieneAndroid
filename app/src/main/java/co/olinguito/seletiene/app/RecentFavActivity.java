@@ -3,6 +3,7 @@ package co.olinguito.seletiene.app;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class RecentFavActivity extends ChildActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 JSONObject item = (JSONObject) parent.getItemAtPosition(position);
                 try {
-                    if (mode == FAV_MODE) item.put("favorite", true);
+                    if (mode == FAV_MODE) item.put("Favorite", true);
                 } catch (JSONException ignored) {
                 }
                 Intent intent = new Intent(getBaseContext(), ItemDetailActivity.class);
@@ -144,19 +145,20 @@ public class RecentFavActivity extends ChildActivity {
             // set data
             JSONObject item = (JSONObject) getItem(position);
             try {
-                title.setText(item.getString("title"));
-                name.setText(item.getString("ownerName"));
-                description.setText(item.getString("description"));
-                rating.setRating(((Double) item.get("rating")).floatValue());
+                title.setText(item.getString("Title"));
+                name.setText(item.getString("OwnerName"));
+                description.setText(item.getString("Description"));
+                rating.setRating(((Double) item.get("Rating")).floatValue());
                 // image
-                int type = item.getInt("type");
+                int type = item.getInt("Type");
                 if (type == Api.TYPE_PRODUCT)
                     image.setDefaultImageResId(R.drawable.product_img);
                 else if (type == Api.TYPE_SERVICE)
                     image.setDefaultImageResId(R.drawable.service_img);
-                if (!item.isNull("imageFile"))
-                    image.setImageUrl(Api.BASE_URL + item.getString("imageFile"), RequestSingleton.getInstance(RecentFavActivity.this).getImageLoader());
-            } catch (JSONException ignored) {
+                if (!item.isNull("ImageFile"))
+                    image.setImageUrl(Api.BASE_URL + item.getString("ImageFile"), RequestSingleton.getInstance(RecentFavActivity.this).getImageLoader());
+            } catch (JSONException e) {
+                Log.e("JSON_ERROR>", e.getMessage());
             }
             return vi;
         }

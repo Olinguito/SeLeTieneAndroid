@@ -117,11 +117,11 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
                             try {
                                 // save user profile in shared preferences
                                 userManager.saveUser(new UserManager.User(
-                                        response.getString("userId"),
-                                        response.getString("email"),
-                                        response.getString("name"),
-                                        response.getString("phoneNumber"),
-                                        response.getString("mobileNumber")
+                                        response.getString("UserId"),
+                                        response.getString("Email"),
+                                        response.getString("Name"),
+                                        response.getString("PhoneNumber"),
+                                        response.getString("MobileNumber")
                                 ));
                                 Intent intent = new Intent(RegisterActivity.this, ItemListActivity.class);
                                 intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -246,7 +246,7 @@ public class RegisterActivity extends ChildActivity implements AdapterView.OnIte
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             JSONObject city = response.getJSONObject(i);
-                            cities.add(city.getString("name"));
+                            cities.add(city.getString("Name"));
                         } catch (JSONException ignored) {
                         }
                     }

@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -223,7 +222,7 @@ public class OfferActivity extends ActionBarActivity implements ActionBar.TabLis
                 if (type == TYPE_PRODUCT && mPhotoFile.exists()) {
                     progress.setMessage(getString(R.string.offer_uploading_pic));
                     try {
-                        Api.uploadProductOrServicePhoto(response.getInt("id"), mPhotoFile, new Response.Listener<Object>() {
+                        Api.uploadProductOrServicePhoto(response.getInt("Id"), mPhotoFile, new Response.Listener<Object>() {
                             @Override
                             public void onResponse(Object response) {
                                 if (progress.isShowing()) progress.dismiss();

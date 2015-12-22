@@ -2,6 +2,7 @@ package co.olinguito.seletiene.app;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,21 +32,21 @@ public class ItemGridAdapter extends BaseAdapter {
         GridViewHolder vh = (GridViewHolder) viewHolder;
         try {
             JSONObject item = mData.getJSONObject(i);
-            String title = item.getString("title");
-            int type = item.getInt("type");
+            String title = item.getString("Title");
+            int type = item.getInt("Type");
 
             title = title.substring(0, 1).toUpperCase() + title.substring(1);
             vh.title.setText(title);
-            vh.name.setText(item.getString("ownerName"));
-            vh.rating.setRating(((Double) item.get("rating")).floatValue());
+            vh.name.setText(item.getString("OwnerName"));
+            vh.rating.setRating(((Double) item.get("Rating")).floatValue());
             if (type == Api.TYPE_PRODUCT)
                 vh.image.setDefaultImageResId(R.drawable.product_img);
             else if (type == Api.TYPE_SERVICE)
                 vh.image.setDefaultImageResId(R.drawable.service_img);
-            if (!item.isNull("imageFile"))
-                vh.image.setImageUrl(Api.BASE_URL + item.getString("imageFile"), RequestSingleton.getInstance(this.ctx).getImageLoader());
+            if (!item.isNull("ImageFile"))
+                vh.image.setImageUrl(Api.BASE_URL + item.getString("ImageFile"), RequestSingleton.getInstance(this.ctx).getImageLoader());
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("JSON_ERROR>", e.getMessage());
         }
     }
 

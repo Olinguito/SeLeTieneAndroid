@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,12 +59,13 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
             try {
                 int titleRes;
                 mItem = new JSONObject(getArguments().getString(JSON_OBJECT_STRING));
-                mType = mItem.getInt("type");
+                mType = mItem.getInt("Type");
                 if (mType == TYPE_PRODUCT) titleRes = R.string.product;
                 else titleRes = R.string.service;
                 getActivity().setTitle(titleRes);
 
-            } catch (JSONException ignored) {
+            } catch (JSONException e) {
+                Log.e("JSON_ERROR>", e.getMessage());
             }
         }
     }
@@ -77,16 +79,16 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
         if (mItem != null) {
             try {
                 float elevation = getResources().getDimension(R.dimen.button_elevation);
-                int type = mItem.getInt("type");
+                int type = mItem.getInt("Type");
 
                 rootView.findViewById(R.id.detail_contact).setOnClickListener(this);
-                mTitle = mItem.getString("title");
+                mTitle = mItem.getString("Title");
                 mTitle = mTitle.substring(0, 1).toUpperCase() + mTitle.substring(1);
                 ((TextView) rootView.findViewById(R.id.detail_title)).setText(mTitle);
-                mOwnerName = mItem.getString("ownerName");
+                mOwnerName = mItem.getString("OwnerName");
                 ((TextView) rootView.findViewById(R.id.detail_owner)).setText(mOwnerName);
                 mDetailText = (TextView) rootView.findViewById(R.id.detail_description);
-                mDetailText.setText(mItem.getString("description"));
+                mDetailText.setText(mItem.getString("Description"));
                 ViewCompat.setElevation(rootView.findViewById(R.id.detail_image_container), elevation);
                 NetworkImageView image = (NetworkImageView) rootView.findViewById(R.id.detail_picture);
                 // set default image
@@ -95,14 +97,14 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 else if (type == TYPE_SERVICE)
                     image.setDefaultImageResId(R.drawable.service_img);
                 // download image if available
-                if (!mItem.isNull("imageFile"))
-                    image.setImageUrl(Api.BASE_URL + mItem.getString("imageFile"), RequestSingleton.getInstance(getActivity()).getImageLoader());
+                if (!mItem.isNull("ImageFile"))
+                    image.setImageUrl(Api.BASE_URL + mItem.getString("ImageFile"), RequestSingleton.getInstance(getActivity()).getImageLoader());
                 CheckBox fav = (CheckBox) rootView.findViewById(R.id.detail_favorite);
-                if (mItem.getBoolean("favorite"))
+                if (mItem.getBoolean("Favorite"))
                     fav.setChecked(true);
                 fav.setOnClickListener(this);
                 mRating = (RatingBar) rootView.findViewById(R.id.detail_rating);
-                mRating.setRating((float) mItem.getDouble("rating"));
+                mRating.setRating((float) mItem.getDouble("Rating"));
                 // contact info
                 final TextView phoneView = (TextView) rootView.findViewById(R.id.profile_phone_edit);
                 final TextView mobileView = (TextView) rootView.findViewById(R.id.profile_mobile_edit);
@@ -114,15 +116,15 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                 emailView.setOnClickListener(this);
 
                 // provider info
-                Api.getProductOrService(mItem.getInt("id"), new Response.Listener() {
+                Api.getProductOrService(mItem.getInt("Id"), new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         try {
                             JSONObject itemData = (JSONObject) response;
-                            JSONObject owner = itemData.getJSONObject("owner");
-                            String email = owner.getString("email");
-                            String phone = owner.getString("phoneNumber");
-                            String mobile = owner.getString("mobileNumber");
+                            JSONObject owner = itemData.getJSONObject("Owner");
+                            String email = owner.getString("Email");
+                            String phone = owner.getString("PhoneNumber");
+                            String mobile = owner.getString("MobileNumber");
                             emailView.setText(email);
                             if (!(phone.equals(NULL_FIELD) || phone.isEmpty()) || phone.equals(JSONObject.NULL)){
                                 phoneView.setText(phone);
@@ -133,7 +135,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                                 mShareTel = mobile;
                             }
 
-                        } catch (JSONException ignored) {
+                        } catch (JSONException e) {
+                            Log.e("JSON_ERROR>", e.getMessage());
                         }
 
                     }
@@ -141,7 +144,8 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
 
                 // share
                 rootView.findViewById(R.id.detail_share).setOnClickListener(this);
-            } catch (JSONException ignored) {
+            } catch (JSONException e) {
+                Log.e("JSON_ERROR>", e.getMessage());
             }
         }
 
@@ -152,8 +156,9 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         int itemId = 0;
         try {
-            itemId = mItem.getInt("id");
-        } catch (JSONException ignored) {
+            itemId = mItem.getInt("Id");
+        } catch (JSONException e) {
+            Log.e("JSON_ERROR>", e.getMessage());
         }
         switch (v.getId()) {
             case R.id.detail_favorite:
@@ -204,7 +209,7 @@ public class ItemDetailFragment extends Fragment implements View.OnClickListener
                         mRating.setIsIndicator(true);
                         int roundedRating = (int) Math.ceil(rating);
                         try {
-                            Api.ratePS(mItem.getInt("id"), roundedRating, new Response.Listener<JSONObject>() {
+                            Api.ratePS(mItem.getInt("Id"), roundedRating, new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Toast.makeText(getActivity(), R.string.detail_message_rated, Toast.LENGTH_LONG).show();

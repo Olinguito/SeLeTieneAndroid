@@ -7,15 +7,13 @@ import android.util.Log;
 import android.widget.Toast;
 import co.olinguito.seletiene.app.R;
 import com.android.volley.*;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +22,9 @@ import static com.android.volley.Request.Method.*;
 
 public class Api {
     //    public static final String BASE_URL = "http://seletiene.cloudapp.net";
-    public static final String BASE_URL = "http://200.119.110.136:81/seletienea";
+    public static final String BASE_URL = "http://201.245.123.114:8089/seletiene";
     public static final int TYPE_PRODUCT = 0;
     public static final int TYPE_SERVICE = 1;
-    private static final String LOGIN_PARAM_EMAIL = "username";
-    private static final String LOGIN_PARAM_PWD = "password";
     private static final int REQUEST_TIMEOUT = 2000;
     private static final int REQUEST_RETRY_COUNT = 2;
     private static final float REQUEST_BACKOFF_MULT = 1.4f;
@@ -71,12 +67,7 @@ public class Api {
         requestQueue.add(request);
     }
 
-    public static void login(String email, String password, final Response.Listener<JSONObject> listener, final Response.ErrorListener errorListener) throws JSONException {
-        final ArrayList<NameValuePair> data = new ArrayList<>();
-        data.add(new BasicNameValuePair(LOGIN_PARAM_EMAIL, email));
-        data.add(new BasicNameValuePair(LOGIN_PARAM_PWD, password));
-        // needed for oauth2
-        data.add(new BasicNameValuePair("grant_type", "password"));
+    public static void login(final String email, final String password, final Response.Listener<JSONObject> listener, final Response.ErrorListener errorListener) throws JSONException {
         // Get authorization token then get the user profile
         JsonObjectRequest request = new JsonObjectRequest(POST, url("token"), null, new Response.Listener<JSONObject>() {
             @Override
@@ -90,10 +81,16 @@ public class Api {
                 }
             }
         }, errorListener) {
-            // TODO: remove when backend accepts JSON body
             @Override
             public byte[] getBody() {
-                return URLEncodedUtils.format(data, getParamsEncoding()).getBytes();
+                String authData = null;
+                try {
+                    authData = "username=" + URLEncoder.encode(email, "UTF-8") +
+                            "&password=" + URLEncoder.encode(password, "UTF-8") +
+                            "&grant_type=password";
+                } catch (UnsupportedEncodingException ignored) {
+                }
+                return authData != null ? authData.getBytes() : new byte[0];
             }
 
             @Override
@@ -107,7 +104,7 @@ public class Api {
 
     public static void loginFB(JSONObject data, final Response.Listener<JSONObject> listener, final Response.ErrorListener errorListener) {
         Log.d("FB>>", data.toString());
-        requestQueue.add(new JsonObjectRequest(POST, url("fb"), data, new Response.Listener<JSONObject>(){
+        requestQueue.add(new JsonObjectRequest(POST, url("fb"), data, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -122,14 +119,11 @@ public class Api {
     }
 
     public static void getProductsAndServices(HashMap<String, String> paramsMap, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        // TODO: remove when users can be validated
-        paramsMap.put("ignoreDPSValidation", "true");
-        Log.d("Api>>", paramsMap.toString());
-        ArrayList<NameValuePair> parameters = new ArrayList<>();
+        String searchUrl = url("items") + "?";
         for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
-            parameters.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+            searchUrl += URLEncoder.encode(entry.getKey()) + "=" +  URLEncoder.encode(entry.getValue()) + "&";
         }
-        String searchUrl = url("items") + "?" + URLEncodedUtils.format(parameters, "utf-8");
+        searchUrl = searchUrl.substring(0, searchUrl.length() - 1);
 
         JsonArrayRequest itemsRequest = new JsonArrayRequest(searchUrl, listener, errorListener);
         requestQueue.add(itemsRequest);
@@ -173,8 +167,9 @@ public class Api {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    listener.onResponse(response.getJSONArray("cities"));
-                } catch (JSONException ignored) {
+                    listener.onResponse(response.getJSONArray("Cities"));
+                } catch (JSONException e) {
+                    Log.e("JSON_ERROR>", e.getMessage());
                 }
             }
         }, errorListener));
@@ -185,7 +180,7 @@ public class Api {
         requestQueue.add(new JsonObjectRequest(PUT, url, new JSONObject(), listener, errorListener));
     }
 
-    public static void resetPasword(String email, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public static void resetPassword(String email, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         String url = url("passReset") + email;
         requestQueue.add(new JsonObjectRequest(POST, url, new JSONObject(), listener, errorListener));
     }

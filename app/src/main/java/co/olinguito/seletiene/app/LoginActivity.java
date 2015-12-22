@@ -1,18 +1,9 @@
 package co.olinguito.seletiene.app;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.IntentCompat;
-import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -20,7 +11,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import co.olinguito.seletiene.app.util.Api;
 import co.olinguito.seletiene.app.util.ChildActivity;
 import co.olinguito.seletiene.app.util.DefaultApiErrorHandler;
@@ -30,16 +24,13 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * A login screen that offers login via email/password. (based on login template)
  */
-public class LoginActivity extends ChildActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginActivity extends ChildActivity {
 
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
 
     @Override
@@ -48,10 +39,7 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        if (VERSION.SDK_INT >= 14)
-            getSupportLoaderManager().initLoader(0, null, this);
-
+        mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -124,16 +112,17 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                         // save user profile data in shared preferences
                         try {
                             userManager.saveUser(new UserManager.User(
-                                    response.getString("userId"),
-                                    response.getString("email"),
-                                    response.getString("name"),
-                                    response.getString("phoneNumber"),
-                                    response.getString("mobileNumber")
+                                    response.getString("UserId"),
+                                    response.getString("Email"),
+                                    response.getString("Name"),
+                                    response.getString("PhoneNumber"),
+                                    response.getString("MobileNumber")
                             ));
                             Intent intent = new Intent(LoginActivity.this, ItemListActivity.class);
                             intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
-                        } catch (JSONException ignored) {
+                        } catch (JSONException e) {
+                            Log.e("JSON_ERROR>", e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -144,7 +133,8 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
                         Api.handleResponseError(LoginActivity.this, error);
                     }
                 });
-            } catch (JSONException ignored) {
+            } catch (JSONException e) {
+                Log.e("JSON_ERROR>", e.getMessage());
             }
         }
     }
@@ -153,50 +143,9 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    // email auto-complete stuff
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                ProfileQuery.PROJECTION,
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-        mEmailView.setAdapter(adapter);
-    }
-
     public void resetPassword(View view) {
         if (!TextUtils.isEmpty(mEmailView.getText()))
-            Api.resetPasword(mEmailView.getText().toString(), new Response.Listener<JSONObject>() {
+            Api.resetPassword(mEmailView.getText().toString(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Toast.makeText(LoginActivity.this, R.string.rl_pass_reset_message, Toast.LENGTH_LONG).show();
@@ -205,13 +154,6 @@ public class LoginActivity extends ChildActivity implements LoaderManager.Loader
         else
             Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_LONG).show();
     }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {ContactsContract.CommonDataKinds.Email.ADDRESS, ContactsContract.CommonDataKinds.Email.IS_PRIMARY,};
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
 }
 
 

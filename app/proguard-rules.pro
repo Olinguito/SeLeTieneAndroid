@@ -20,8 +20,11 @@
 -keepattributes *Annotation*
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
--dontwarn com.squareup.okhttp.**
+-dontwarn com.squareup.okhttp.internal.**
 -dontwarn okio.**
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 -keep class android.support.v7.widget.SearchView { *; }
+# volley
+-keep class com.android.volley.toolbox.** { *; }
+-dontwarn com.android.volley.toolbox.**

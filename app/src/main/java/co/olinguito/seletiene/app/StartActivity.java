@@ -32,18 +32,7 @@ public class StartActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-        Button registerBtn = (Button) findViewById(R.id.register_btn);
-        Button loginBtn = (Button) findViewById(R.id.login_btn);
-        float elevation = getResources().getDimension(R.dimen.button_elevation);
-        ViewCompat.setElevation(registerBtn, elevation);
-        ViewCompat.setElevation(loginBtn, elevation);
-        // hidden views
-        View btnInfo = findViewById(R.id.start_btn_info);
-        View btnsContainer = findViewById(R.id.start_btns_container);
-        View btnOffer = findViewById(R.id.start_btn_offer);
-        // loading view
-        View loadingView = findViewById(R.id.start_loading);
+
         // check if user exsist
         userManager = new UserManager(this);
         if (userManager.getUser() != null && Api.hasCredentials()) {
@@ -51,6 +40,19 @@ public class StartActivity extends FragmentActivity {
             intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
+            setContentView(R.layout.activity_start);
+
+            Button registerBtn = (Button) findViewById(R.id.register_btn);
+            Button loginBtn = (Button) findViewById(R.id.login_btn);
+            float elevation = getResources().getDimension(R.dimen.button_elevation);
+            ViewCompat.setElevation(registerBtn, elevation);
+            ViewCompat.setElevation(loginBtn, elevation);
+            // hidden views
+            View btnInfo = findViewById(R.id.start_btn_info);
+            View btnsContainer = findViewById(R.id.start_btns_container);
+            View btnOffer = findViewById(R.id.start_btn_offer);
+            // loading view
+            View loadingView = findViewById(R.id.start_loading);
             loadingView.setVisibility(View.GONE);
             btnInfo.setVisibility(View.VISIBLE);
             btnsContainer.setVisibility(View.VISIBLE);
@@ -106,11 +108,11 @@ public class StartActivity extends FragmentActivity {
                                     if (progress.isShowing()) progress.dismiss();
                                     try {
                                         userManager.saveUser(new UserManager.User(
-                                                response.getString("userId"),
-                                                response.getString("email"),
-                                                response.getString("name"),
-                                                response.getString("phoneNumber"),
-                                                response.getString("mobileNumber")
+                                                response.getString("UserId"),
+                                                response.getString("Email"),
+                                                response.getString("Name"),
+                                                response.getString("PhoneNumber"),
+                                                response.getString("MobileNumber")
                                         ));
                                         Intent intent = new Intent(StartActivity.this, ItemListActivity.class);
                                         intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
